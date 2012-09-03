@@ -32,12 +32,33 @@ public class RobotTemplate extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() { // called on robot start (powered on)
-        CommandBase.init(); // initialize commands and the OI (created by Netbeans)
-        SmartDashboard.putData("Scheduler", Scheduler.getInstance());
-        autonomousCommand = new ShootTwoSimple();
-        updateStatus();
+        try
+        {
+            CommandBase.init(); // initialize commands and the OI (created by Netbeans)
+            SmartDashboard.putData("Scheduler", Scheduler.getInstance());
+            autonomousCommand = new ShootTwoSimple();
+            updateStatus();
+        }
+        catch(Exception ex1)
+        {
+            MessageLogger.LogError("Exception In RobotInit.");
+            MessageLogger.LogError(ex1.toString());
+            ex1.printStackTrace();
+        }
     }
 
+    private void setUpJoysticks()
+    {
+        DriverStation ds = DriverStation.getInstance();
+
+        // ATTENTION: getAnalogIn does not work in robotInit()!!  (except in debug mode :()
+        double stickDeadening = ds.getAnalogIn(1) + 1;
+        double conveyorDeadening = ds.getAnalogIn(2) + 1;
+        double speedScale = ds.getAnalogIn(3) / 5.0;
+        RobotMap.stickDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, stickDeadening, speedScale);
+        RobotMap.conveyorDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, conveyorDeadening, speedScale);
+
+    }
     public void autonomousInit() {
 
         try
@@ -45,21 +66,15 @@ public class RobotTemplate extends IterativeRobot {
             // schedule the autonomous command (example)
             CommandBase.driveTrain.gyro.reset();
 
-            DriverStation ds = DriverStation.getInstance();
-
-            // ATTENTION: getAnalogIn does not work in robotInit()!!  (except in debug mode :()
-            double stickDeadening = ds.getAnalogIn(1) + 1;
-            double conveyorDeadening = ds.getAnalogIn(2) + 1;
-            double speedScale = ds.getAnalogIn(3) / 5.0;
-            RobotMap.stickDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, stickDeadening, speedScale);
-            RobotMap.conveyorDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, conveyorDeadening, speedScale);
-
+            setUpJoysticks();
+            
             autonomousCommand.start();
             updateStatus();
         }
         catch(Exception ex1)
         {
-            System.out.println("autonomousInit");
+            MessageLogger.LogError("Exception In autonomousInit.");
+            MessageLogger.LogError(ex1.toString());
             ex1.printStackTrace();
         }
     }
@@ -75,7 +90,8 @@ public class RobotTemplate extends IterativeRobot {
         }
         catch(Exception ex1)
         {
-            System.out.println("autonomousPeriodic");
+            MessageLogger.LogError("Exception In autonomousPeriodic.");
+            MessageLogger.LogError(ex1.toString());
             ex1.printStackTrace();
         }
     }
@@ -84,26 +100,38 @@ public class RobotTemplate extends IterativeRobot {
       
   }
     public void teleopInit() {
-        if(autonomousCommand != null)
-            autonomousCommand.cancel();     // Cancel the autonomous command.
-        DriverStation ds = DriverStation.getInstance();
+        try
+        {
+            if(autonomousCommand != null)
+                autonomousCommand.cancel();     // Cancel the autonomous command.
 
-        // ATTENTION: getAnalogIn does not work in robotInit()!!  (except in debug mode :()
-        double stickDeadening = ds.getAnalogIn(1) + 1;
-        double conveyorDeadening = ds.getAnalogIn(2) + 1;
-        double speedScale = ds.getAnalogIn(3) / 5.0;
-        RobotMap.stickDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, stickDeadening, speedScale);
-        RobotMap.conveyorDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, conveyorDeadening, speedScale);
+            setUpJoysticks();
 
-        updateStatus();
+            updateStatus();
+        }
+        catch(Exception ex1)
+        {
+            MessageLogger.LogError("Exception In teleopInit.");
+            MessageLogger.LogError(ex1.toString());
+            ex1.printStackTrace();
+        }
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();
-        updateStatus();
+        try
+        {
+            Scheduler.getInstance().run();
+            updateStatus();
+        }
+        catch(Exception ex1)
+        {
+            MessageLogger.LogError("Exception In teleopPeriodic.");
+            MessageLogger.LogError(ex1.toString());
+            ex1.printStackTrace();
+        }
     }
     public void updateStatus()
     {
@@ -118,10 +146,28 @@ public class RobotTemplate extends IterativeRobot {
     }
     public void teleopDisable()
     {
+        try
+        {
+        }
+        catch(Exception ex1)
+        {
+            MessageLogger.LogError("Exception In teleopDisable.");
+            MessageLogger.LogError(ex1.toString());
+            ex1.printStackTrace();
+        }
     }
     public void disabledInit()
     {
-        Scheduler.getInstance().run();
-        updateStatus();
+        try
+        {
+            Scheduler.getInstance().run();
+            updateStatus();
+        }
+        catch(Exception ex1)
+        {
+            MessageLogger.LogError("Exception In disabledInit.");
+            MessageLogger.LogError(ex1.toString());
+            ex1.printStackTrace();
+        }
     }
 }

@@ -24,13 +24,13 @@ public class Cannon extends Subsystem {
     public static final double MOTOR_DIRECTION = -1.0;
     public static final double WINCH_MOTOR_SPEED = MOTOR_DIRECTION * 1.0;
     public static final double TIME_TO_RELEASE_CLUTCH = 1.0;
-    public static final double TIME_TO_REMOVE_SLACK = 1.0;
-    public static final double WINCH_MOTOR_SLACK_SPEED = MOTOR_DIRECTION * 0.15;
+    public static final double TIME_TO_REMOVE_SLACK = 1.0;  // NOTE: this is a maximum time.  We use the encoder to figure out when the slack is removed.
+    public static final double WINCH_MOTOR_SLACK_SPEED = MOTOR_DIRECTION * 0.12;
     
     static final double MOTOR_SCALE_FACTOR = MOTOR_DIRECTION * 1.0;       // UNUSED.  Used when pulling back winch with joystick.
-    static final int ENCODER_MAX_VALUE = 1000;
+    static final double ENCODER_MAX_VALUE = 1000.0;
 
-    public int cannonSetPoint = 640;
+    public double cannonSetPoint = 640.0;
     public Encoder encoderWinch; // = new Encoder(RobotMap.winchEncoderPortA, RobotMap.winchEncoderPortB);
     Victor winchMotor;
     Solenoid clutchSolenoidHold;
@@ -68,9 +68,9 @@ public class Cannon extends Subsystem {
         winchMotor.set(0.0);
     }
 
-    public boolean encoderLimitReached(int limit) {
+    public boolean encoderLimitReached(double limit) {
 //        System.out.println("encoderWinch/limit: " + encoderWinch.get() + "/" + limit);
-        return (encoderWinch.get() >= limit);
+        return (encoderWinch.get() >= (int) limit);
     }
 
     public void initDefaultCommand() {
@@ -83,7 +83,7 @@ public class Cannon extends Subsystem {
     public void updateStatus() {
         SmartDashboard.putInt("W Encoder:", encoderWinch.get());
         SmartDashboard.putDouble("Winch Motor:", winchMotor.get());
-        SmartDashboard.putInt("Cannon Set Point:", cannonSetPoint);
+        SmartDashboard.putDouble("Cannon Set Point:", cannonSetPoint);
         SmartDashboard.putBoolean("clutchSolenoidRelease: ", clutchSolenoidHold.get());
         SmartDashboard.putBoolean("clutchSolenoidHold: ", clutchSolenoidRelease.get());
     }
@@ -101,13 +101,13 @@ public class Cannon extends Subsystem {
     }
 
     public void zeroSetPoint() {
-        cannonSetPoint = 0;
+        cannonSetPoint = 0.0;
     }
 
     public void setSetPointWithTrigger(Joystick xBox) {
-        double triggerValue = -xBox.getAxis(Joystick.AxisType.kZ) * 2.0;
+        double triggerValue = -xBox.getAxis(Joystick.AxisType.kZ) * 5.0;
 
-        if(cannonSetPoint + triggerValue < 0)
+        if(cannonSetPoint + triggerValue < 0.0)
             return;
         if(cannonSetPoint + triggerValue < ENCODER_MAX_VALUE)
             cannonSetPoint += triggerValue;

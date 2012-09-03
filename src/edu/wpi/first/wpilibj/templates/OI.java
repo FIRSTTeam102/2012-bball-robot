@@ -5,10 +5,13 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.templates.commands.CompressorOff;
 import edu.wpi.first.wpilibj.templates.commands.CompressorOn;
+import edu.wpi.first.wpilibj.templates.commands.FindTarget;
 import edu.wpi.first.wpilibj.templates.commands.GateDownThenUp;
+import edu.wpi.first.wpilibj.templates.commands.LightsOff;
+import edu.wpi.first.wpilibj.templates.commands.LightsOn;
 import edu.wpi.first.wpilibj.templates.commands.RemoveSlackAndArm;
 import edu.wpi.first.wpilibj.templates.commands.ShiftHigh;
-import edu.wpi.first.wpilibj.templates.commands.ShiftLow;
+import edu.wpi.first.wpilibj.templates.commands.Shift;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
 import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
 import edu.wpi.first.wpilibj.templates.commands.TurnToAngle;
@@ -61,27 +64,28 @@ public class OI {
     private JoystickButton leftStickButton8;
     private JoystickButton leftStickButton3;
     private JoystickButton leftStickButton4;
+
+    private JoystickButton rightStickButton2;
+    private JoystickButton rightStickButton3;
+    private JoystickButton rightStickButton4;
+
     private JoystickButton xBoxA;
     private JoystickButton xBoxB;
     private JoystickButton xBoxX;
     private JoystickButton xBoxY;
-    private JoystickButton rightStickButton2;
-    private JoystickButton rightStickButton3;
-    private JoystickButton rightStickButton4;
+    private JoystickButton xBoxRightBumper;
 
     public OI() {
         leftstick = new Joystick(JOYSTICK_PORT);
         rightstick = new Joystick(JOYSTICK_PORT2);
         xBox = new Joystick(JOYSTICK_PORT3);
 
-        trigger = new JoystickButton(leftstick, Joystick.ButtonType.kTop.value);
+//        trigger = new JoystickButton(leftstick, Joystick.ButtonType.kTop.value);
 //        trigger.whenPressed(new ArmAndShoot());
 
-        leftStickButton8 = new JoystickButton(leftstick, 8);
-        leftStickButton8.whenPressed(new CompressorOn());
-        leftStickButton8.whenReleased(new CompressorOff());
-        leftStickButton3 = new JoystickButton(leftstick, 3);
-        leftStickButton4 = new JoystickButton(leftstick, 4);
+//        leftStickButton8 = new JoystickButton(leftstick, 8);
+//        leftStickButton8.whenPressed(new CompressorOn());
+//        leftStickButton8.whenReleased(new CompressorOff());
 
         rightStickButton2 = new JoystickButton(rightstick, 2);
         rightStickButton3 = new JoystickButton(rightstick, 3);
@@ -91,17 +95,19 @@ public class OI {
         xBoxB = new JoystickButton(xBox, 2);
         xBoxX = new JoystickButton(xBox, 3);
         xBoxY = new JoystickButton(xBox, 4);
+        xBoxRightBumper = new JoystickButton(xBox, 6);
 
         xBoxY.whenPressed(new RemoveSlackAndArm());
         xBoxB.whenPressed(new GateDownThenUp());
         xBoxA.whenPressed(new Shoot());
-        xBoxX.whenPressed(new TurnToAngle());
+        xBoxX.whenPressed(new FindTarget());
+        xBoxRightBumper.whenPressed(new LightsOn());
+        xBoxRightBumper.whenReleased(new LightsOff());
 
-        rightStickButton2.whileHeld(new ShiftHigh());
-        rightStickButton2.whenReleased(new ShiftLow());
-
+        rightStickButton2.whileHeld(new Shift());
+//        rightStickButton2.whenReleased(new ShiftHigh());
         leftStickButton3.whileHeld(new TilterArmDrive(TilterArm.ARM_DOWN_DIRECTION * TilterArm.SPEED_TO_MOVE_ARM_DOWN));
-//        rightStickButton4.whenReleased(new TilterArmUp());
+//        leftStickButton4.whenReleased(new TilterArmUp());
         leftStickButton4.whileHeld(new TilterArmDrive(-TilterArm.ARM_DOWN_DIRECTION * TilterArm.SPEED_TO_MOVE_ARM_UP));
     }
 

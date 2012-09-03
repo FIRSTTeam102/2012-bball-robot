@@ -22,7 +22,7 @@ public class Shifters extends Subsystem {
     {
         shiftSolenoidLow = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidHigh);
         shiftSolenoidHigh = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidLow);
-        shiftHigh();
+        shiftLow();
     }
 
     public void initDefaultCommand() {

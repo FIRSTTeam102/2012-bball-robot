@@ -38,7 +38,7 @@ public class DriveTrain extends PIDSubsystem {
     public DriveTrain() {
         super("DriveTrain", Kp, Ki, Kd);
         leftMotor = new Victor(RobotMap.leftMotor);
-        rightMotor = new Jaguar(RobotMap.rightMotor);
+        rightMotor = new Victor(RobotMap.rightMotor);
         drive = new RobotDrive(leftMotor, rightMotor);
         drive.setSafetyEnabled(false);
 /*        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -93,7 +93,7 @@ public class DriveTrain extends PIDSubsystem {
         SmartDashboard.putDouble("leftDriveMotor: ", leftMotor.get());
         SmartDashboard.putDouble("rightDriveMotor: ", rightMotor.get());
         SmartDashboard.putDouble("rightJoyY: ", rightJoyY);
-        SmartDashboard.putDouble("leftJoyY: ", leftJoyY);
+        SmartDashboard.putDouble("leftJoyY: ", -leftJoyY);
      }
 
     protected double returnPIDInput() {

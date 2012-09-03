@@ -55,6 +55,7 @@ public abstract class CommandBase extends Command {
         SmartDashboard.putData(new CompressorOff());
 
         // Cannon Commands
+        SmartDashboard.putData(new ZeroWinchEncoder());
         SmartDashboard.putData(new EngageClutch(true));
         SmartDashboard.putData("Disengage Clutch", new EngageClutch(false));
         SmartDashboard.putData(new RemoveCannonSlack());
@@ -79,7 +80,7 @@ public abstract class CommandBase extends Command {
         // Drive Train commands
         SmartDashboard.putData(new TurnToAngle());
         SmartDashboard.putData(new ShiftHigh());
-        SmartDashboard.putData(new ShiftLow());
+        SmartDashboard.putData(new Shift());
 
         // Vision Commands
         SmartDashboard.putData(new LightAndFindTarget());

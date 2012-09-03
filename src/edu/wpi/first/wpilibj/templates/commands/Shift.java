@@ -4,51 +4,40 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
-import edu.wpi.first.wpilibj.templates.subsystems.Cannon;
-
 
 /**
  *
  * @author Administrator
  */
-public class ArmCannon extends CommandBase {
+public class Shift extends CommandBase {
 
-    double encoderTarget = 0;
-
-    public ArmCannon() {
+    public Shift() {
         // Use requires() here to declare subsystem dependencies
-        requires(cannon);
+        requires(shifters);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        // make sure if this is run twice we do not overwind.
-        cannon.zeroEncoder();
-        encoderTarget = cannon.cannonSetPoint;
-        if(!cannon.encoderLimitReached(encoderTarget))
-        {
-            cannon.turnOnWinchMotor(Cannon.WINCH_MOTOR_SPEED);
-        }
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-//        System.out.println("winch encoder: " + cannon.encoderWinch.get());
+        shifters.shiftHigh();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return cannon.encoderLimitReached(encoderTarget);
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        cannon.turnOffWinchMotor();
+        shifters.shiftLow();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        cannon.turnOffWinchMotor();
+        end();
     }
 }
