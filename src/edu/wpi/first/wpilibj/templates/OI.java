@@ -3,18 +3,14 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.templates.commands.CompressorOff;
-import edu.wpi.first.wpilibj.templates.commands.CompressorOn;
-import edu.wpi.first.wpilibj.templates.commands.FindTarget;
 import edu.wpi.first.wpilibj.templates.commands.GateDownThenUp;
+import edu.wpi.first.wpilibj.templates.commands.LightAndFindTarget;
 import edu.wpi.first.wpilibj.templates.commands.LightsOff;
 import edu.wpi.first.wpilibj.templates.commands.LightsOn;
-import edu.wpi.first.wpilibj.templates.commands.RemoveSlackAndArm;
-import edu.wpi.first.wpilibj.templates.commands.ShiftHigh;
+import edu.wpi.first.wpilibj.templates.commands.RemoveSlackwDiffAndArm;
 import edu.wpi.first.wpilibj.templates.commands.Shift;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
 import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
-import edu.wpi.first.wpilibj.templates.commands.TurnToAngle;
 import edu.wpi.first.wpilibj.templates.subsystems.TilterArm;
 
 /**
@@ -100,10 +96,10 @@ public class OI {
         xBoxY = new JoystickButton(xBox, 4);
         xBoxRightBumper = new JoystickButton(xBox, 6);
 
-        xBoxY.whenPressed(new RemoveSlackAndArm());
+        xBoxY.whenPressed(new RemoveSlackwDiffAndArm());
         xBoxB.whenPressed(new GateDownThenUp());
         xBoxA.whenPressed(new Shoot());
-        xBoxX.whenPressed(new FindTarget());
+        xBoxX.whenPressed(new LightAndFindTarget());
         xBoxRightBumper.whenPressed(new LightsOn());
         xBoxRightBumper.whenReleased(new LightsOff());
 

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import Team102Lib.*;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.templates.commands.GateUp;
 import edu.wpi.first.wpilibj.templates.commands.ShootTwoSimple;
 
 /**
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj.templates.commands.ShootTwoSimple;
 public class RobotTemplate extends IterativeRobot {
 
     Command autonomousCommand;
+    Command upGate;
 
 
     /**
@@ -108,6 +110,9 @@ public class RobotTemplate extends IterativeRobot {
 
             setUpJoysticks();
 
+            upGate = new GateUp();
+            upGate.start();
+
             updateStatus();
         }
         catch(Exception ex1)
@@ -136,6 +141,7 @@ public class RobotTemplate extends IterativeRobot {
     }
     public void updateStatus()
     {
+       
 //        CommandBase.ballGate.updateStatus();
         CommandBase.cannon.updateStatus();
 //        CommandBase.conveyor.updateStatus();
@@ -146,6 +152,7 @@ public class RobotTemplate extends IterativeRobot {
         CommandBase.vision.updateStatus();
 
         DriverStationLCD.getInstance().updateLCD();
+         
     }
     public void teleopDisable()
     {

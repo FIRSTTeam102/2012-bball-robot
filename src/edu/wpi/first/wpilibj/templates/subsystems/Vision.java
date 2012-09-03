@@ -35,7 +35,7 @@ public class Vision extends Subsystem {
     String imageName = null;
     Relay lightSwitch;
     boolean lightsOn;                //
-    boolean useCamera = true;
+    boolean useCamera = false;
 
 
     public Vision()
@@ -76,7 +76,10 @@ public class Vision extends Subsystem {
         {
             ColorImage image = getImage();
             if(image != null)
+            {
+                MessageLogger.LogMessage("findTarget - with Image");
                 bottomBoard = processImage(image);
+            }
             else
                 bottomBoard = null;
             
@@ -110,13 +113,15 @@ public class Vision extends Subsystem {
             int imageIndex = currentImageIndex++;
             currentImageIndex %= imageList.length;
             imageName = imageList[imageIndex];
-            return new RGBImage("/10ft2.jpg");
+            return new RGBImage("/Test5.jpg");
 //       return new RGBImage("/VisionImages/" + imageName);
 //        return new RGBImage("/Test1.jpg");
         }
     }
     public BackboardParticle processImage(ColorImage image) throws NIVisionException
     {
+        MessageLogger.LogMessage("processImage");
+
         BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
         BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts
         BinaryImage convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles
@@ -129,8 +134,10 @@ public class Vision extends Subsystem {
         BackboardParticle leftmost = null;
         BackboardParticle rightmost = null;
 
+        MessageLogger.LogMessage("numReports: " + reports.length);
         for (int i = 0; i < reports.length; i++) {                                // print results
             ParticleAnalysisReport r = reports[i];
+            
             System.out.println(Timer.getFPGATimestamp() + ": Particle: " + i );
 
             // Keep track of where each particle fits on the 'map' of backboards.
