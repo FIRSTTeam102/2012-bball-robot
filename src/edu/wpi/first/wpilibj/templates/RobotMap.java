@@ -35,7 +35,8 @@ public class RobotMap {
     public static final int winchEncoderPortA = 2;
     public static final int winchEncoderPortB = 4;
     public static final int compressorSensorChannel = 1;
-
+    public static final int zeroSensorPort = 3;
+    
     // Relay Ports
     public static final int compressorSwitchChannel = 1;
     public static final int cameraLightsSwitchChannel = 8;

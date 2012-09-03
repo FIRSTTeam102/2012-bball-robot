@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.templates.commands.GateDownThenUp;
 import edu.wpi.first.wpilibj.templates.commands.LightAndFindTarget;
 import edu.wpi.first.wpilibj.templates.commands.LightsOff;
 import edu.wpi.first.wpilibj.templates.commands.LightsOn;
-import edu.wpi.first.wpilibj.templates.commands.RemoveSlackwDiffAndArm;
+import edu.wpi.first.wpilibj.templates.commands.RemoveSlackwSensorAndArm;
 import edu.wpi.first.wpilibj.templates.commands.Shift;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
 import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
@@ -96,7 +96,7 @@ public class OI {
         xBoxY = new JoystickButton(xBox, 4);
         xBoxRightBumper = new JoystickButton(xBox, 6);
 
-        xBoxY.whenPressed(new RemoveSlackwDiffAndArm());
+        xBoxY.whenPressed(new RemoveSlackwSensorAndArm());
         xBoxB.whenPressed(new GateDownThenUp());
         xBoxA.whenPressed(new Shoot());
         xBoxX.whenPressed(new LightAndFindTarget());

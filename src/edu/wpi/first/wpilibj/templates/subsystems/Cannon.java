@@ -5,6 +5,7 @@
 package edu.wpi.first.wpilibj.templates.subsystems;
 
 import Team102Lib.MessageLogger;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -23,6 +24,7 @@ public class Cannon extends Subsystem {
     public static final double WINCH_MOTOR_SPEED = MOTOR_DIRECTION * 1.0;
     public static final double TIME_TO_RELEASE_CLUTCH = 1.0;
     public static final double TIME_TO_REMOVE_SLACK = 1.0;  // NOTE: this is a maximum time.  We use the encoder to figure out when the slack is removed.
+    public static final double REMOVE_SLACK_TIMEOUT = 1.5;
     public static final double WINCH_MOTOR_SLACK_SPEED = MOTOR_DIRECTION * 0.12;
     
     static final double MOTOR_SCALE_FACTOR = MOTOR_DIRECTION * 1.0;       // UNUSED.  Used when pulling back winch with joystick.
@@ -33,12 +35,16 @@ public class Cannon extends Subsystem {
     Victor winchMotor;
     Solenoid clutchSolenoidHold;
     Solenoid clutchSolenoidRelease;
+    public DigitalInput zeroSensor;
 
     public Cannon() {
         winchMotor = new Victor(RobotMap.winchMotorPort);
         clutchSolenoidHold = new Solenoid(RobotMap.solenoidModule, RobotMap.clutchSolenoidReleasePort);
         clutchSolenoidRelease = new Solenoid(RobotMap.solenoidModule, RobotMap.clutchSolenoidHoldPort);
         encoderWinch = new Encoder(RobotMap.winchEncoderPortA, RobotMap.winchEncoderPortB);
+
+        zeroSensor = new DigitalInput(RobotMap.zeroSensorPort);
+
         engageClutch();
     }
 
@@ -88,6 +94,7 @@ public class Cannon extends Subsystem {
                 , "SP: " + (int) cannonSetPoint);
         MessageLogger.WriteToLCD(RobotMap.WinchEncoderLCDLine, RobotMap.WinchEncoderLCDCol
                 , "WE: " + encoderWinch.get());
+//        MessageLogger.LogMessage("zeroSensor: " + zeroSensor.get());
     }
 
     // Arm the kicker using the right trigger of the xBox controller.

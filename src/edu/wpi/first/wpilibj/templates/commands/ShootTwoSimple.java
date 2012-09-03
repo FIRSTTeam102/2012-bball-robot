@@ -18,20 +18,20 @@ public class ShootTwoSimple extends CommandGroup {
         
         DriverStation ds = DriverStation.getInstance();
         double preShotWaitTime = ds.getAnalogIn(4); // How many seconds to wait in autonomous?
-        int cannonSetPoint = 640;
+        int cannonSetPoint = 570;
 
         System.out.println("Pre-Wait: " + preShotWaitTime);
         addSequential(new WaitCommand("Pre-Autonomous Wait", preShotWaitTime));
         addSequential(new SetCannonSetPoint(cannonSetPoint));
         System.out.println("cannon SetPoint: " + cannonSetPoint);
-        addSequential(new RemoveSlackAndArm());
+        addSequential(new RemoveSlackwSensorAndArm());
         // NOTE: one ball is already in the cannon
         System.out.println("Shoot 1");
         addSequential(new Shoot());
 
         // Second Shot
         addSequential(new GateDown());
-        addSequential(new RemoveSlackwDiffAndArm());
+        addSequential(new RemoveSlackwSensorAndArm());
 //        addSequential(new RemoveSlackwDiffAndArm());
         System.out.println("Shoot 2");
         addSequential(new Shoot());
