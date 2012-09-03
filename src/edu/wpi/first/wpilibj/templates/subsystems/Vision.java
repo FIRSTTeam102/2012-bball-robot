@@ -5,17 +5,17 @@
 package edu.wpi.first.wpilibj.templates.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-// import edu.wpi.first.wpilibj.camera.AxisCamera;
+//import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.CriteriaCollection;
 import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
-import edu.wpi.first.wpilibj.image.RGBImage;
 
 import Team102Lib.BackboardParticle;
 import Team102Lib.VisionTargetSDBData;
@@ -38,7 +38,9 @@ public class Vision extends Subsystem {
 
     public Vision()
     {
+//        System.out.println("About to create camera");
 //        camera = AxisCamera.getInstance();  // get an instance ofthe camera
+//        System.out.println("After to create camera");
         cc = new CriteriaCollection();      // create the criteria for the particle filter
         cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
         cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
@@ -74,7 +76,11 @@ public class Vision extends Subsystem {
         try
         {
             ColorImage image = getImage();
-            bottomBoard = processImage(image);
+            if(image != null)
+                bottomBoard = processImage(image);
+            else
+                bottomBoard = null;
+            
 //            SmartDashboard.putData("Camera:", image);  // SmartDashboard gets images from the camera automatically.
             if(imageName != null)
                 SmartDashboard.putString("Image: ", imageName);
@@ -109,28 +115,35 @@ public class Vision extends Subsystem {
         {
             ex1.printStackTrace();
         }
-        catch(Exception ex1)
+/*        catch(AxisCameraException ex1)
+        {
+            ex1.printStackTrace();
+        }
+*/        catch(Exception ex1)
         {
             ex1.printStackTrace();
         }
         return false;
     }
-    protected ColorImage getImage() throws NIVisionException
+    protected ColorImage getImage() throws NIVisionException //, AxisCameraException
     {
+        ColorImage image = null;
 
-        //ColorImage image = camera.getImage();     // comment if using stored images
-//        String[] imageList = {"10ft2.jpg", "20Ft2.jpg", "30Ft2.jpg", "40Ft2.jpg", "46feet.jpg", "40Ft2.jpg"
+//        ColorImage image = camera.getImage();     // comment if using stored images
+        return image;
+/*        String[] imageList = {"10ft2.jpg", "20Ft2.jpg", "30Ft2.jpg", "40Ft2.jpg", "46feet.jpg", "40Ft2.jpg"
 //                , "30Ft2.jpg", "20Ft2.jpg", "10ft2.jpg"
-        String[] imageList = {"12ft.jpg", "12ft2.jpg","12ft3.jpg","12ft4.jpg", "Test1.bmp", "Test2.bmp"
-                ,"Test3.bmp","Test4.bmp"
+//        String[] imageList = {"12ft.jpg", "12ft2.jpg","12ft3.jpg","12ft4.jpg", "Test1.bmp", "Test2.bmp"
+//                ,"Test3.bmp","Test4.bmp"
             };
         int imageIndex = currentImageIndex++;
         currentImageIndex %= imageList.length;
         imageName = imageList[imageIndex];
        return new RGBImage("/VisionImages/" + imageName);
+
 //        return new RGBImage("/Test1.jpg");
-//        return new RGBImage("/10ft2.jpg");
-    }
+        return new RGBImage("/10ft2.jpg");
+*/    }
     public BackboardParticle processImage(ColorImage image) throws NIVisionException
     {
         BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects

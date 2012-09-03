@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.templates.commands.DriveConveyor;
  */
 public class Conveyor extends Subsystem {
 
-    public static final double CONVEYOR_MOTOR_SCALE = 1.0;
+    public static final double CONVEYOR_MOTOR_SCALE = -1.0;
     Victor conveyorMotor;
     double joyY;
 

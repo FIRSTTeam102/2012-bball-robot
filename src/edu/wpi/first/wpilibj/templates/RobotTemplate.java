@@ -26,7 +26,6 @@ public class RobotTemplate extends IterativeRobot {
 
     Command autonomousCommand;
 
-
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -34,14 +33,22 @@ public class RobotTemplate extends IterativeRobot {
     public void robotInit() { // called on robot start (powered on)
         CommandBase.init(); // initialize commands and the OI (created by Netbeans)
         SmartDashboard.putData("Scheduler", Scheduler.getInstance());
-        autonomousCommand = new ShootTwo();
+        DriverStation ds = DriverStation.getInstance();
+        if (ds.getDigitalIn(RobotMap.autonomousDisabled)) {
+            autonomousCommand = null;
+
+        } else {
+            autonomousCommand = new ShootTwo();
+
+        }
         updateStatus();
     }
-
     public void autonomousInit() {
         // schedule the autonomous command (example)
         CommandBase.driveTrain.gyro.reset();
-        autonomousCommand.start();
+         if (autonomousCommand != null) {
+             autonomousCommand.start();
+         }
         updateStatus();
     }
 
@@ -53,11 +60,12 @@ public class RobotTemplate extends IterativeRobot {
         updateStatus();
     }
 
-  public void startCompetiton() {
-      
-  }
+    public void startCompetiton() {
+    }
+
     public void teleopInit() {
-        autonomousCommand.cancel();     // Cancel the autonomous command.
+        if(autonomousCommand != null)
+            autonomousCommand.cancel();     // Cancel the autonomous command.
         DriverStation ds = DriverStation.getInstance();
 
         // ATTENTION: getAnalogIn does not work in robotInit()!!  (except in debug mode :()
@@ -77,8 +85,8 @@ public class RobotTemplate extends IterativeRobot {
         Scheduler.getInstance().run();
         updateStatus();
     }
-    public void updateStatus()
-    {
+
+    public void updateStatus() {
         CommandBase.ballGate.updateStatus();
         CommandBase.cannon.updateStatus();
         CommandBase.conveyor.updateStatus();
@@ -88,11 +96,11 @@ public class RobotTemplate extends IterativeRobot {
         CommandBase.tilterArm.updateStatus();
 //        CommandBase.vision.updateStatus();
     }
-    public void teleopDisable()
-    {
+
+    public void teleopDisable() {
     }
-    public void disabledInit()
-    {
+
+    public void disabledInit() {
         Scheduler.getInstance().run();
         updateStatus();
     }
