@@ -4,15 +4,13 @@
  */
 package edu.wpi.first.wpilibj.templates.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import Team102Lib.MessageLogger;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.templates.RobotMap;
-import edu.wpi.first.wpilibj.templates.commands.ArmWithTrigger;
 import edu.wpi.first.wpilibj.templates.commands.SetSetPointWithTrigger;
 
 /**
@@ -81,11 +79,15 @@ public class Cannon extends Subsystem {
     }
 
     public void updateStatus() {
-        SmartDashboard.putInt("W Encoder:", encoderWinch.get());
-        SmartDashboard.putDouble("Winch Motor:", winchMotor.get());
-        SmartDashboard.putDouble("Cannon Set Point:", cannonSetPoint);
-        SmartDashboard.putBoolean("clutchSolenoidRelease: ", clutchSolenoidHold.get());
-        SmartDashboard.putBoolean("clutchSolenoidHold: ", clutchSolenoidRelease.get());
+//        SmartDashboard.putInt("W Encoder:", encoderWinch.get());
+//        SmartDashboard.putDouble("Winch Motor:", winchMotor.get());
+//        SmartDashboard.putDouble("Cannon Set Point:", cannonSetPoint);
+//        SmartDashboard.putBoolean("clutchSolenoidRelease: ", clutchSolenoidHold.get());
+//        SmartDashboard.putBoolean("clutchSolenoidHold: ", clutchSolenoidRelease.get());
+        MessageLogger.WriteToLCD(RobotMap.SetPointLCDLine, RobotMap.SetPointLCDCol
+                , "SP: " + (int) cannonSetPoint);
+        MessageLogger.WriteToLCD(RobotMap.WinchEncoderLCDLine, RobotMap.WinchEncoderLCDCol
+                , "WE: " + encoderWinch.get());
     }
 
     // Arm the kicker using the right trigger of the xBox controller.

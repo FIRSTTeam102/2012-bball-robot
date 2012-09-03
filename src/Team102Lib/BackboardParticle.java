@@ -13,6 +13,7 @@ public class BackboardParticle {
     public static final double TanOfHalfCameraFieldHeight = 0.29921965948028956d;   // Derived.
     public static final double bbBoxHeight = 18.0; // height from bottom of tape to top of tape in inches.
     public static final double bbBoxWidth = 24.0; // width in inches.
+    public static final double distanceToSetPointFactor = 640.0 / 144.0;    // encoder count / inch
     public static boolean calcByWidth = false;   // Calc distance using height or width?
     public ParticleAnalysisReport particle;
     public final double x;
@@ -23,6 +24,7 @@ public class BackboardParticle {
     public final double width;
     public final double height;
     public final double aspectRatio;
+    public final int encoderSetPoint;
 
     public BackboardParticle(ParticleAnalysisReport par) {
         particle = par;
@@ -58,6 +60,8 @@ public class BackboardParticle {
         boundingRectRight = particle.boundingRectLeft + particle.boundingRectWidth;
         boundingRectBottom = particle.boundingRectTop + particle.boundingRectHeight;
         aspectRatio = (double) particle.boundingRectWidth / (double) particle.boundingRectHeight;
+
+        encoderSetPoint = (int) (distance * distanceToSetPointFactor);
     }
 
     public String toString() {

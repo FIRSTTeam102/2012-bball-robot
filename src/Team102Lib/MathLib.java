@@ -30,21 +30,21 @@ public final class MathLib {
 
     // Function to calculate pow(base, exponent) based on interpolation where base is between 0 and 1 and exponent is between 1 and 5
     // This used for joystick deadening without massive calculations.
-    public static double interpolatedPow(double base, double exponent) {
+    private static final double[][] powLessThanOne = {
+        {0.0, 0.0, 0.0, 0.0, 0.0},
+        {0.1, 0.01, 0.001, 0.0001, 0.00001}, // base goes down 0.0 - 1.0, by 0.1
+        {0.2, 0.04, 0.008, 0.0016, 0.00032},
+        {0.3, 0.09, 0.027, 0.0081, 0.00243},
+        {0.4, 0.16, 0.064, 0.0256, 0.01024},
+        {0.5, 0.25, 0.125, 0.0625, 0.03125},
+        {0.6, 0.36, 0.216, 0.1296, 0.07776},
+        {0.7, 0.49, 0.343, 0.2401, 0.16807},
+        {0.8, 0.64, 0.512, 0.4096, 0.32768},
+        {0.9, 0.81, 0.729, 0.6561, 0.59049},
+        {1.0, 1.0, 1.0, 1.0, 1.0}
         // exponent goes across 1-5
-        double[][] powLessThanOne = {
-            {0.0, 0.0, 0.0, 0.0, 0.0},
-            {0.1, 0.01, 0.001, 0.0001, 0.00001}, // base goes down 0.0 - 1.0, by 0.1
-            {0.2, 0.04, 0.008, 0.0016, 0.00032},
-            {0.3, 0.09, 0.027, 0.0081, 0.00243},
-            {0.4, 0.16, 0.064, 0.0256, 0.01024},
-            {0.5, 0.25, 0.125, 0.0625, 0.03125},
-            {0.6, 0.36, 0.216, 0.1296, 0.07776},
-            {0.7, 0.49, 0.343, 0.2401, 0.16807},
-            {0.8, 0.64, 0.512, 0.4096, 0.32768},
-            {0.9, 0.81, 0.729, 0.6561, 0.59049},
-            {1.0, 1.0, 1.0, 1.0, 1.0}
-        };
+    };
+    public static double interpolatedPow(double base, double exponent) {
 
         int iLow = (int) Math.floor(exponent - 1);
         int iHigh = (int) Math.ceil(exponent - 1);

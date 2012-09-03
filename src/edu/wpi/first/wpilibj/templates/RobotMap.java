@@ -1,6 +1,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import Team102Lib.*;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -56,4 +57,22 @@ public class RobotMap {
     public static final int autonomousLeft = 3;
     public static final int autonomousRamp = 4;
 
+    // LCD Display Positions
+    public static final DriverStationLCD.Line SetPointLCDLine = DriverStationLCD.Line.kUser2;
+    public static final int SetPointLCDCol = 1;
+
+    public static final DriverStationLCD.Line WinchEncoderLCDLine = DriverStationLCD.Line.kUser2;
+    public static final int WinchEncoderLCDCol = DriverStationLCD.kLineLength / 2;
+
+    public static final DriverStationLCD.Line GyroLCDLine = DriverStationLCD.Line.kUser3;
+    public static final int GyroLCDCol = 1;
+
+    public static final DriverStationLCD.Line TargetDistLCDLine = DriverStationLCD.Line.kUser4;
+    public static final int TargetDistLCDCol = 1;
+
+    public static final DriverStationLCD.Line TargetPosLCDLine = DriverStationLCD.Line.kUser4;
+    public static final int TargetPosLCDCol = DriverStationLCD.kLineLength / 2;
+
+    public static final DriverStationLCD.Line TargetSetPointLCDLine = DriverStationLCD.Line.kUser5;
+    public static final int TargetSetPointLCDCol = 1;
 }

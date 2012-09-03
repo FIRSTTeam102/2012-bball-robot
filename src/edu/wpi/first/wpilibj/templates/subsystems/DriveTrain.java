@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates.subsystems;
 
+import Team102Lib.MathLib;
+import Team102Lib.MessageLogger;
 import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.ADXL345_I2C.DataFormat_Range;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -12,10 +14,8 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  * @author Administrator
@@ -81,19 +81,22 @@ public class DriveTrain extends PIDSubsystem {
     }
 
     public void updateStatus() {
-        SmartDashboard.putDouble("Gyro: ", gyro.getAngle());
-        ADXL345_I2C.AllAxes accs = accelerometer.getAccelerations();
-        SmartDashboard.putDouble("AcclX: ", accs.XAxis);
-        SmartDashboard.putDouble("AcclY: ", accs.YAxis);
-        SmartDashboard.putDouble("AcclZ: ", accs.ZAxis);
-        SmartDashboard.putDouble("P: ", this.getPIDController().getP());
-        SmartDashboard.putDouble("I: ", this.getPIDController().getI());
-        SmartDashboard.putDouble("D: ", this.getPIDController().getD());
-        SmartDashboard.putDouble("PID Error: ", this.getPIDController().getError());
-        SmartDashboard.putDouble("leftDriveMotor: ", leftMotor.get());
-        SmartDashboard.putDouble("rightDriveMotor: ", rightMotor.get());
-        SmartDashboard.putDouble("rightJoyY: ", rightJoyY);
-        SmartDashboard.putDouble("leftJoyY: ", -leftJoyY);
+//        SmartDashboard.putDouble("Gyro: ", gyro.getAngle());
+//        ADXL345_I2C.AllAxes accs = accelerometer.getAccelerations();
+//        SmartDashboard.putDouble("AcclX: ", accs.XAxis);
+//        SmartDashboard.putDouble("AcclY: ", accs.YAxis);
+//        SmartDashboard.putDouble("AcclZ: ", accs.ZAxis);
+//        SmartDashboard.putDouble("P: ", this.getPIDController().getP());
+//        SmartDashboard.putDouble("I: ", this.getPIDController().getI());
+//        SmartDashboard.putDouble("D: ", this.getPIDController().getD());
+//        SmartDashboard.putDouble("PID Error: ", this.getPIDController().getError());
+//        SmartDashboard.putDouble("leftDriveMotor: ", leftMotor.get());
+//        SmartDashboard.putDouble("rightDriveMotor: ", rightMotor.get());
+//        SmartDashboard.putDouble("rightJoyY: ", rightJoyY);
+//        SmartDashboard.putDouble("leftJoyY: ", -leftJoyY);
+
+        MessageLogger.WriteToLCD(RobotMap.GyroLCDLine, RobotMap.GyroLCDCol
+            , "Gy: " + MathLib.round(gyro.getAngle(), 1));
      }
 
     protected double returnPIDInput() {

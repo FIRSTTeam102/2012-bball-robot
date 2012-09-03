@@ -5,48 +5,49 @@
 package edu.wpi.first.wpilibj.templates.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-// import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.CriteriaCollection;
 import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
-import edu.wpi.first.wpilibj.image.RGBImage;
 
 import Team102Lib.BackboardParticle;
+import Team102Lib.MathLib;
+import Team102Lib.MessageLogger;
 import Team102Lib.VisionTargetSDBData;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.camera.AxisCameraException;
+import edu.wpi.first.wpilibj.image.RGBImage;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 /**
  *
  * @author Administrator
  */
 public class Vision extends Subsystem {
-//    AxisCamera camera;          // the axis camera object (connected to the switch)
+    AxisCamera camera;          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
     int currentImageIndex;      // When testing without a camera, this keeps track of which image we are looking at.
     public BackboardParticle bottomBoard = null;
-    VisionTargetSDBData smartdashBoardData;
     String imageName = null;
     Relay lightSwitch;
     boolean lightsOn;                //
+    boolean useCamera = true;
 
 
     public Vision()
     {
-//        camera = AxisCamera.getInstance();  // get an instance ofthe camera
+        if(useCamera)
+            camera = AxisCamera.getInstance();  // get an instance ofthe camera
         cc = new CriteriaCollection();      // create the criteria for the particle filter
         cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
         cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
         currentImageIndex = 0;
         lightSwitch = new Relay(RobotMap.cameraLightsSwitchChannel, Relay.Direction.kForward);
         lightsOn = false;
-
-        smartdashBoardData = new VisionTargetSDBData();
     }
     public void initDefaultCommand() {
         // Uncomment this if you want FindTarget to run continuously.
@@ -79,69 +80,41 @@ public class Vision extends Subsystem {
             else
                 bottomBoard = null;
             
-//            SmartDashboard.putData("Camera:", image);  // SmartDashboard gets images from the camera automatically.
-            if(imageName != null)
-                SmartDashboard.putString("Image: ", imageName);
-            if(bottomBoard != null)
-            {
-                SmartDashboard.putString("Target Status: ", "Found");
-                SmartDashboard.putDouble("Target Position: ", bottomBoard.x);
-                SmartDashboard.putDouble("Target Distance: ", bottomBoard.distance);
-                SmartDashboard.putDouble("Target Width: ", bottomBoard.width);
-                SmartDashboard.putDouble("Target Aspect Ratio: ", bottomBoard.aspectRatio);
-                SmartDashboard.putDouble("Target Quality: ", bottomBoard.particle.particleQuality);
-                SmartDashboard.putString("Target W x H: ", bottomBoard.particle.boundingRectWidth + " x "
-                        + bottomBoard.particle.boundingRectHeight);
-
-                smartdashBoardData.showBackboardParticle(bottomBoard);
-                SmartDashboard.putData("Backboard Target", smartdashBoardData);
-
-                return true;
-            }
-            else
-            {
-                SmartDashboard.putString("Target Status: ", "Not Found");
-                SmartDashboard.putDouble("Target Position: ", -1.0);
-                SmartDashboard.putDouble("Target Distance: ", -1.0);
-                SmartDashboard.putDouble("Target Width: ", -1.0);
-                SmartDashboard.putDouble("Target Aspect Ratio: ", -1.0);
-                SmartDashboard.putString("Target W x H: ", "--");
-                return false;
-            }
+            return (bottomBoard != null);
         }
         catch(NIVisionException ex1)
         {
             ex1.printStackTrace();
         }
-/*        catch(AxisCameraException ex1)
-        {
-            ex1.printStackTrace();
-        }
-*/        catch(Exception ex1)
+        catch(Exception ex1)
         {
             ex1.printStackTrace();
         }
         return false;
     }
-    protected ColorImage getImage() throws NIVisionException //, AxisCameraException
+    protected ColorImage getImage() throws NIVisionException, AxisCameraException
     {
         ColorImage image = null;
 
-//        ColorImage image = camera.getImage();     // comment if using stored images
-        return image;
-/*        String[] imageList = {"10ft2.jpg", "20Ft2.jpg", "30Ft2.jpg", "40Ft2.jpg", "46feet.jpg", "40Ft2.jpg"
-//                , "30Ft2.jpg", "20Ft2.jpg", "10ft2.jpg"
-//        String[] imageList = {"12ft.jpg", "12ft2.jpg","12ft3.jpg","12ft4.jpg", "Test1.bmp", "Test2.bmp"
-//                ,"Test3.bmp","Test4.bmp"
-            };
-        int imageIndex = currentImageIndex++;
-        currentImageIndex %= imageList.length;
-        imageName = imageList[imageIndex];
-       return new RGBImage("/VisionImages/" + imageName);
+        if(useCamera)
+        {
+            image =  camera.getImage();
+            return image;
+        }
+        else
+        {
 
+            String[] imageList = {"12ft.jpg", "12ft2.jpg","12ft3.jpg","12ft4.jpg", "Test1.bmp", "Test2.bmp"
+                    ,"Test3.bmp","Test4.bmp"
+                };
+            int imageIndex = currentImageIndex++;
+            currentImageIndex %= imageList.length;
+            imageName = imageList[imageIndex];
+            return new RGBImage("/10ft2.jpg");
+//       return new RGBImage("/VisionImages/" + imageName);
 //        return new RGBImage("/Test1.jpg");
-        return new RGBImage("/10ft2.jpg");
-*/    }
+        }
+    }
     public BackboardParticle processImage(ColorImage image) throws NIVisionException
     {
         BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
@@ -174,26 +147,26 @@ public class Vision extends Subsystem {
                 rightmost = bp;
 
         }
-        System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
+        MessageLogger.LogMessage("NumParticles: " + filteredImage.getNumberParticles());
         if(highest != null)
         {
-            System.out.println("HIGHEST:");
-            System.out.println(highest.toString());
+            MessageLogger.LogMessage("HIGHEST:");
+            MessageLogger.LogMessage(highest.toString());
         }
         if(lowest != null)
         {
-            System.out.println("LOWEST:");
-            System.out.println(lowest.toString());
+            MessageLogger.LogMessage("LOWEST:");
+            MessageLogger.LogMessage(lowest.toString());
         }
         if(leftmost != null)
         {
-            System.out.println("LEFTMOST:");
-            System.out.println(leftmost.toString());
+            MessageLogger.LogMessage("LEFTMOST:");
+            MessageLogger.LogMessage(leftmost.toString());
         }
         if(rightmost != null)
         {
-            System.out.println("RIGHTMOST:");
-            System.out.println(rightmost.toString());
+            MessageLogger.LogMessage("RIGHTMOST:");
+            MessageLogger.LogMessage(rightmost.toString());
         }
         /**
          * all images in Java must be freed after they are used since they are allocated out
@@ -219,4 +192,54 @@ public class Vision extends Subsystem {
         else
             return null;
     }
+    public void updateStatus() {
+        if(bottomBoard != null)
+        {
+            MessageLogger.WriteToLCD(RobotMap.TargetDistLCDLine, RobotMap.TargetDistLCDCol
+                , "TD: " + (int) bottomBoard.distance);
+
+            MessageLogger.WriteToLCD(RobotMap.TargetPosLCDLine, RobotMap.TargetPosLCDCol
+                , "TP: " + MathLib.round(bottomBoard.x, 2));
+
+            // TODO: Calculate the setpoint
+            MessageLogger.WriteToLCD(RobotMap.TargetSetPointLCDLine, RobotMap.TargetSetPointLCDCol
+                , "TSP: " + bottomBoard.encoderSetPoint);
+        }
+        else
+        {
+            MessageLogger.WriteToLCD(RobotMap.TargetDistLCDLine, RobotMap.TargetDistLCDCol
+                , "TD: ----");
+
+            MessageLogger.WriteToLCD(RobotMap.TargetPosLCDLine, RobotMap.TargetPosLCDCol
+                , "TP: ----");
+
+            MessageLogger.WriteToLCD(RobotMap.TargetSetPointLCDLine, RobotMap.TargetSetPointLCDCol
+                , "TSP: ----");
+        }
+/*            if(imageName != null)
+                SmartDashboard.putString("Image: ", imageName);
+            if(bottomBoard != null)
+            {
+                SmartDashboard.putString("Target Status: ", "Found");
+                SmartDashboard.putDouble("Target Position: ", bottomBoard.x);
+                SmartDashboard.putDouble("Target Distance: ", bottomBoard.distance);
+                SmartDashboard.putDouble("Target Width: ", bottomBoard.width);
+                SmartDashboard.putDouble("Target Aspect Ratio: ", bottomBoard.aspectRatio);
+                SmartDashboard.putDouble("Target Quality: ", bottomBoard.particle.particleQuality);
+                SmartDashboard.putString("Target W x H: ", bottomBoard.particle.boundingRectWidth + " x "
+                        + bottomBoard.particle.boundingRectHeight);
+
+                SmartDashboard.putData("Backboard Target", smartdashBoardData);
+            }
+            else
+            {
+                SmartDashboard.putString("Target Status: ", "Not Found");
+                SmartDashboard.putDouble("Target Position: ", -1.0);
+                SmartDashboard.putDouble("Target Distance: ", -1.0);
+                SmartDashboard.putDouble("Target Width: ", -1.0);
+                SmartDashboard.putDouble("Target Aspect Ratio: ", -1.0);
+                SmartDashboard.putString("Target W x H: ", "--");
+            }
+*/
+     }
 }
