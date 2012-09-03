@@ -31,21 +31,21 @@ public class RobotMap {
     public static final double twistCorrection = +0.00;
 
     //Digital Input / Outputs
-    public static final int winchEncoderPortA = 1;
-    public static final int winchEncoderPortB = 2;
-    public static final int compressorSensorChannel = 4;
+    public static final int winchEncoderPortA = 2;
+    public static final int winchEncoderPortB = 4;
+    public static final int compressorSensorChannel = 1;
 
     // Relay Ports
     public static final int compressorSwitchChannel = 1;
 
     // Solenoid Modules
     public static final int solenoidModule = 2;
-    public static final int clutchSolenoidReleasePort = 1;
-    public static final int clutchSolenoidHoldPort = 2;
-    public static final int gateSolenoidUpPort = 3;
-    public static final int gateSolenoidDownPort = 5;
-    public static final int shiftSolenoidHigh = 6;
-    public static final int shiftSolenoidLow = 7;
+    public static final int clutchSolenoidReleasePort = 3;
+    public static final int clutchSolenoidHoldPort = 4;
+    public static final int gateSolenoidUpPort = 1;
+    public static final int gateSolenoidDownPort = 2;
+    public static final int shiftSolenoidHigh = 5;
+    public static final int shiftSolenoidLow = 6;
 
     // I2C ports
     public static final int accelerometerPort = 1;

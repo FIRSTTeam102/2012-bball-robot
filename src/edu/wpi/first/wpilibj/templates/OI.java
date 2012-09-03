@@ -3,10 +3,12 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.templates.commands.ArmAndShoot;
 import edu.wpi.first.wpilibj.templates.commands.CompressorOff;
 import edu.wpi.first.wpilibj.templates.commands.CompressorOn;
+import edu.wpi.first.wpilibj.templates.commands.GateDownThenUp;
 import edu.wpi.first.wpilibj.templates.commands.RemoveSlackAndArm;
+import edu.wpi.first.wpilibj.templates.commands.ShiftHigh;
+import edu.wpi.first.wpilibj.templates.commands.ShiftLow;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
 import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
 import edu.wpi.first.wpilibj.templates.commands.TurnToGyroZero;
@@ -60,8 +62,10 @@ public class OI {
     private JoystickButton xBoxA;
     private JoystickButton xBoxB;
     private JoystickButton xBoxX;
-    private JoystickButton rightStickButton4;
+    private JoystickButton xBoxY;
+    private JoystickButton rightStickButton2;
     private JoystickButton rightStickButton3;
+    private JoystickButton rightStickButton4;
 
     public OI() {
         leftstick = new Joystick(JOYSTICK_PORT);
@@ -69,22 +73,28 @@ public class OI {
         xBox = new Joystick(JOYSTICK_PORT3);
 
         trigger = new JoystickButton(leftstick, Joystick.ButtonType.kTop.value);
-        trigger.whenPressed(new ArmAndShoot());
+//        trigger.whenPressed(new ArmAndShoot());
 
         leftStickButton8 = new JoystickButton(leftstick, 8);
         leftStickButton8.whenPressed(new CompressorOn());
         leftStickButton8.whenReleased(new CompressorOff());
 
-        rightStickButton3 = new JoystickButton(leftstick, 3);
-        rightStickButton4 = new JoystickButton(leftstick, 4);
+        rightStickButton2 = new JoystickButton(rightstick, 2);
+        rightStickButton3 = new JoystickButton(rightstick, 3);
+        rightStickButton4 = new JoystickButton(rightstick, 4);
 
         xBoxA = new JoystickButton(xBox, 1);
-        xBoxA.whenPressed(new Shoot());
         xBoxB = new JoystickButton(xBox, 2);
-        xBoxB.whenPressed(new RemoveSlackAndArm());
         xBoxX = new JoystickButton(xBox, 3);
+        xBoxY = new JoystickButton(xBox, 4);
+
+        xBoxY.whenPressed(new RemoveSlackAndArm());
+        xBoxB.whenPressed(new GateDownThenUp());
+        xBoxA.whenPressed(new Shoot());
         xBoxX.whenPressed(new TurnToGyroZero());
 
+        rightStickButton2.whileHeld(new ShiftLow());
+        rightStickButton2.whenReleased(new ShiftHigh());
         rightStickButton3.whileHeld(new TilterArmDrive(TilterArm.ARM_DOWN_DIRECTION * TilterArm.SPEED_TO_MOVE_ARM_DOWN));
 //        rightStickButton4.whenReleased(new TilterArmUp());
         rightStickButton4.whileHeld(new TilterArmDrive(-TilterArm.ARM_DOWN_DIRECTION * TilterArm.SPEED_TO_MOVE_ARM_UP));

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.templates.subsystems.Cannon;
 import edu.wpi.first.wpilibj.templates.subsystems.Conveyor;
 import edu.wpi.first.wpilibj.templates.subsystems.Pnuematics;
 import edu.wpi.first.wpilibj.templates.subsystems.TilterArm;
+import edu.wpi.first.wpilibj.templates.subsystems.Vision;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -27,6 +28,7 @@ public abstract class CommandBase extends Command {
     public static BallGate ballGate = new BallGate();
     public static TilterArm tilterArm = new TilterArm();
     public static Conveyor conveyor = new Conveyor();
+    public static Vision vision = new Vision();
 
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
@@ -72,6 +74,9 @@ public abstract class CommandBase extends Command {
         SmartDashboard.putData(new TurnToGyroZero());
         SmartDashboard.putData(new ShiftHigh());
         SmartDashboard.putData(new ShiftLow());
+
+        // Vision Commands
+        SmartDashboard.putData(new FindTarget());
 
     }
 

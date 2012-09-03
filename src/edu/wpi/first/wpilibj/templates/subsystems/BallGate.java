@@ -18,28 +18,29 @@ public class BallGate extends Subsystem {
     public static final double TIME_TO_RELEASE_GATE_UP = 0.0;
     public static final double TIME_TO_RELEASE_GATE_DOWN = 0.0;
 
-    Solenoid gateSolenoidUp;
     Solenoid gateSolenoidDown;
+    Solenoid gateSolenoidUp;
 
     public BallGate()
     {
-        gateSolenoidUp = new Solenoid(RobotMap.solenoidModule, RobotMap.gateSolenoidUpPort);
-        gateSolenoidDown = new Solenoid(RobotMap.solenoidModule, RobotMap.gateSolenoidDownPort);
+        gateSolenoidDown = new Solenoid(RobotMap.solenoidModule, RobotMap.gateSolenoidUpPort);
+        gateSolenoidUp = new Solenoid(RobotMap.solenoidModule, RobotMap.gateSolenoidDownPort);
 
+        gateUp();
     }
     public void initDefaultCommand() {
         // No default command.  Gate is opened and closed on command only.
     }
     public void gateUp() {
-        gateSolenoidDown.set(false);
         gateSolenoidUp.set(true);
+        gateSolenoidDown.set(false);
     }
     public void gateDown() {
-        gateSolenoidDown.set(true);
         gateSolenoidUp.set(false);
+        gateSolenoidDown.set(true);
     }
     public void updateStatus() {
-        SmartDashboard.putBoolean("gateSolenoidDown: ", gateSolenoidDown.get());
-        SmartDashboard.putBoolean("gateSolenoidUp: ", gateSolenoidUp.get());
+        SmartDashboard.putBoolean("gateSolenoidDown: ", gateSolenoidUp.get());
+        SmartDashboard.putBoolean("gateSolenoidUp: ", gateSolenoidDown.get());
     }
 }

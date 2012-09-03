@@ -21,35 +21,36 @@ import edu.wpi.first.wpilibj.templates.commands.SetSetPointWithTrigger;
  */
 public class Cannon extends Subsystem {
 
-    public static final double WINCH_MOTOR_SPEED = 0.7;
-    public static final double TIME_TO_RELEASE_CLUTCH = 0.4;
+    public static final double WINCH_MOTOR_SPEED = -0.7;
+    public static final double TIME_TO_RELEASE_CLUTCH = 1.0;
     public static final double TIME_TO_REMOVE_SLACK = 0.4;
     public static final double WINCH_MOTOR_SLACK_SPEED = 0.1;
     
-    static final double MOTOR_SCALE_FACTOR = 0.7;       // UNUSED.
-    static final int ENCODER_MAX_VALUE = 700;
+    static final double MOTOR_SCALE_FACTOR = -0.7;       // UNUSED.
+    static final int ENCODER_MAX_VALUE = 440;
 
     public int cannonSetPoint = 0;
     public Encoder encoderWinch; // = new Encoder(RobotMap.winchEncoderPortA, RobotMap.winchEncoderPortB);
     Victor winchMotor;
-    Solenoid clutchSolenoidRelease;
     Solenoid clutchSolenoidHold;
+    Solenoid clutchSolenoidRelease;
 
     public Cannon() {
         winchMotor = new Victor(RobotMap.winchMotorPort);
-        clutchSolenoidRelease = new Solenoid(RobotMap.solenoidModule, RobotMap.clutchSolenoidReleasePort);
-        clutchSolenoidHold = new Solenoid(RobotMap.solenoidModule, RobotMap.clutchSolenoidHoldPort);
+        clutchSolenoidHold = new Solenoid(RobotMap.solenoidModule, RobotMap.clutchSolenoidReleasePort);
+        clutchSolenoidRelease = new Solenoid(RobotMap.solenoidModule, RobotMap.clutchSolenoidHoldPort);
         encoderWinch = new Encoder(RobotMap.winchEncoderPortA, RobotMap.winchEncoderPortB);
+        engageClutch();
     }
 
     public void engageClutch() {
-        clutchSolenoidRelease.set(true);
-        clutchSolenoidHold.set(false);
+        clutchSolenoidHold.set(true);
+        clutchSolenoidRelease.set(false);
     }
 
     public void disengageClutch() {
-        clutchSolenoidRelease.set(false);
-        clutchSolenoidHold.set(true);
+        clutchSolenoidHold.set(false);
+        clutchSolenoidRelease.set(true);
         zeroEncoder();                      // Auto zero the encoder after releasing to prevent overwinding.
     }
 
@@ -73,16 +74,16 @@ public class Cannon extends Subsystem {
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new ArmWithTrigger());    // Always look to arm with the trigger.
 
         setDefaultCommand(new SetSetPointWithTrigger());
+//        setDefaultCommand(new ArmWithTrigger());
     }
 
     public void updateStatus() {
-        SmartDashboard.putInt("Winch Encoder:", encoderWinch.get());
+        SmartDashboard.putInt("W Encoder:", encoderWinch.get());
         SmartDashboard.putInt("Cannon Set Point:", cannonSetPoint);
-        SmartDashboard.putBoolean("clutchSolenoidRelease: ", clutchSolenoidRelease.get());
-        SmartDashboard.putBoolean("clutchSolenoidHold: ", clutchSolenoidHold.get());
+        SmartDashboard.putBoolean("clutchSolenoidRelease: ", clutchSolenoidHold.get());
+        SmartDashboard.putBoolean("clutchSolenoidHold: ", clutchSolenoidRelease.get());
     }
 
     // Arm the kicker using the right trigger of the xBox controller.

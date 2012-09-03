@@ -31,10 +31,10 @@ public class DriveTrain extends PIDSubsystem {
     RobotDrive drive;
     public Gyro gyro;
     public ADXL345_I2C accelerometer;
-    double righty;
-    double lefty;
-    Solenoid shiftSolenoidHigh;
+    double rightJoyY;
+    double leftJoyY;
     Solenoid shiftSolenoidLow;
+    Solenoid shiftSolenoidHigh;
 
     // Initialize your subsystem here
     public DriveTrain() {
@@ -43,7 +43,7 @@ public class DriveTrain extends PIDSubsystem {
         rightMotor = new Victor(RobotMap.rightMotor);
         drive = new RobotDrive(leftMotor, rightMotor);
         drive.setSafetyEnabled(false);
-/*        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+/*        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
@@ -54,15 +54,10 @@ public class DriveTrain extends PIDSubsystem {
 
         accelerometer = new ADXL345_I2C(RobotMap.accelerometerPort, DataFormat_Range.k4G);
 
-        shiftSolenoidHigh = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidHigh);
-        shiftSolenoidLow = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidLow);
+        shiftSolenoidLow = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidHigh);
+        shiftSolenoidHigh = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidLow);
 
-        // Use these to get going:
-        // setSetpoint() -  Sets where the PID controller should move the system
-        //                  to
-        // enable() - Enables the PID controller.
-
-
+        shiftHigh();
     }
 
     public void enableGyroSetPoint(double setPoint) {
@@ -80,24 +75,30 @@ public class DriveTrain extends PIDSubsystem {
 
     public void driveWithJoysticks(Joystick leftstick, Joystick rightstick) {
 
-        righty = rightstick.getY();
-        lefty = leftstick.getY();
+        rightJoyY = rightstick.getY();
+        leftJoyY = leftstick.getY();
 
-        righty = RobotMap.stickDeadBand.Deaden(righty);
-        lefty = RobotMap.stickDeadBand.Deaden(lefty);
+        rightJoyY = RobotMap.stickDeadBand.Deaden(rightJoyY);
+        leftJoyY = RobotMap.stickDeadBand.Deaden(leftJoyY);
 
-        drive.tankDrive(lefty, righty);
+        drive.tankDrive(-leftJoyY, rightJoyY);
     }
 
     public void updateStatus() {
         SmartDashboard.putDouble("Gyro: ", gyro.getAngle());
-        SmartDashboard.putDouble("Acclrmtr: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kX));
+        SmartDashboard.putDouble("AcclX: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kX));
+        SmartDashboard.putDouble("AcclY: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kY));
+        SmartDashboard.putDouble("AcclZ: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kZ));
         SmartDashboard.putDouble("P: ", this.getPIDController().getP());
         SmartDashboard.putDouble("I: ", this.getPIDController().getI());
         SmartDashboard.putDouble("D: ", this.getPIDController().getD());
         SmartDashboard.putDouble("PID Error: ", this.getPIDController().getError());
-        SmartDashboard.putBoolean("shiftSolenoidHigh: ", shiftSolenoidHigh.get());
-        SmartDashboard.putBoolean("shiftSolenoidLow: ", shiftSolenoidLow.get());
+        SmartDashboard.putBoolean("shiftSolenoidHigh: ", shiftSolenoidLow.get());
+        SmartDashboard.putBoolean("shiftSolenoidLow: ", shiftSolenoidHigh.get());
+        SmartDashboard.putDouble("leftDriveMotor: ", leftMotor.get());
+        SmartDashboard.putDouble("rightDriveMotor: ", rightMotor.get());
+        SmartDashboard.putDouble("rightJoyY: ", rightJoyY);
+        SmartDashboard.putDouble("leftJoyY: ", leftJoyY);
      }
 
     protected double returnPIDInput() {
@@ -115,12 +116,12 @@ public class DriveTrain extends PIDSubsystem {
     }
     public void shiftHigh()
     {
-        shiftSolenoidHigh.set(true);
         shiftSolenoidLow.set(false);
+        shiftSolenoidHigh.set(true);
     }
     public void shiftLow()
     {
-        shiftSolenoidHigh.set(false);
         shiftSolenoidLow.set(true);
+        shiftSolenoidHigh.set(false);
     }
 }
