@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.templates.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.templates.subsystems.Cannon;
 import edu.wpi.first.wpilibj.templates.subsystems.Conveyor;
 import edu.wpi.first.wpilibj.templates.subsystems.Pnuematics;
+import edu.wpi.first.wpilibj.templates.subsystems.Shifters;
 import edu.wpi.first.wpilibj.templates.subsystems.TilterArm;
 import edu.wpi.first.wpilibj.templates.subsystems.Vision;
 
@@ -29,6 +30,7 @@ public abstract class CommandBase extends Command {
     public static TilterArm tilterArm = new TilterArm();
     public static Conveyor conveyor = new Conveyor();
     public static Vision vision = new Vision();
+    public static Shifters shifters = new Shifters();
 
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
@@ -45,6 +47,8 @@ public abstract class CommandBase extends Command {
         SmartDashboard.putData(driveTrain);
         SmartDashboard.putData(pnuematics);
         SmartDashboard.putData(tilterArm);
+        SmartDashboard.putData(shifters);
+        SmartDashboard.putData(vision);
 
         // Pnuematics Commands
         SmartDashboard.putData(new CompressorOn());
@@ -71,12 +75,14 @@ public abstract class CommandBase extends Command {
 //        SmartDashboard.putData("Conveyor Reverse", new DriveConveyor(-Conveyor.CONVEYOR_MOTOR_SCALE));
 
         // Drive Train commands
-        SmartDashboard.putData(new TurnToGyroZero());
+        SmartDashboard.putData(new TurnToAngle());
         SmartDashboard.putData(new ShiftHigh());
         SmartDashboard.putData(new ShiftLow());
 
         // Vision Commands
-        SmartDashboard.putData(new FindTarget());
+        SmartDashboard.putData(new LightAndFindTarget());
+        SmartDashboard.putData(new LightsOn());
+        SmartDashboard.putData(new LightsOff());
 
     }
 

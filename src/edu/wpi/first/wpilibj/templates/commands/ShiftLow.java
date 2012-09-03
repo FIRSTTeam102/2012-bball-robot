@@ -13,7 +13,7 @@ public class ShiftLow extends CommandBase {
 
     public ShiftLow() {
         // Use requires() here to declare subsystem dependencies
-        requires(driveTrain);
+        requires(shifters);
     }
 
     // Called just before this Command runs the first time
@@ -22,7 +22,7 @@ public class ShiftLow extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        driveTrain.shiftLow();
+        shifters.shiftLow();
     }
 
     // Make this return true when this Command no longer needs to run execute()

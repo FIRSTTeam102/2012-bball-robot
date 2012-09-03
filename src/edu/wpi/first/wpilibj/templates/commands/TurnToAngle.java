@@ -9,17 +9,20 @@ package edu.wpi.first.wpilibj.templates.commands;
  *
  * @author Administrator
  */
-public class TurnToGyroZero extends CommandBase {
+public class TurnToAngle extends CommandBase {
 
-    public TurnToGyroZero() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    double angle = 0.0;
+    public TurnToAngle() {
         requires(driveTrain);
+    }
+    public TurnToAngle(double angle) {
+        requires(driveTrain);
+        this.angle = angle;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        driveTrain.enableGyroSetPoint(0);
+        driveTrain.enableGyroSetPoint(angle);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -28,8 +31,7 @@ public class TurnToGyroZero extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-
-        return (Math.abs(driveTrain.gyro.getAngle()) < 1.0);
+        return (Math.abs(driveTrain.gyro.getAngle() - angle) < 1.0);
     }
 
     // Called once after isFinished returns true

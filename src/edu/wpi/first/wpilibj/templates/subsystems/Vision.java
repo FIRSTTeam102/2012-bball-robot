@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.templates.commands.FindTarget;
 // import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
@@ -19,6 +18,9 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.image.RGBImage;
 
 import Team102Lib.BackboardParticle;
+import Team102Lib.VisionTargetSDBData;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.templates.RobotMap;
 /**
  *
  * @author Administrator
@@ -27,8 +29,12 @@ public class Vision extends Subsystem {
 //    AxisCamera camera;          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
     int currentImageIndex;      // When testing without a camera, this keeps track of which image we are looking at.
-    public BackboardParticle topBoard = null;
+    public BackboardParticle bottomBoard = null;
+    VisionTargetSDBData smartdashBoardData;
     String imageName = null;
+    Relay lightSwitch;
+    boolean lightsOn;                //
+
 
     public Vision()
     {
@@ -37,29 +43,55 @@ public class Vision extends Subsystem {
         cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
         cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
         currentImageIndex = 0;
+        lightSwitch = new Relay(RobotMap.cameraLightsSwitchChannel, Relay.Direction.kForward);
+        lightsOn = false;
+
+        smartdashBoardData = new VisionTargetSDBData();
     }
     public void initDefaultCommand() {
         // Uncomment this if you want FindTarget to run continuously.
         // setDefaultCommand(new FindTarget());
     }
+        public void switchLights(boolean switchOn){
+        if((switchOn && lightsOn) || (!switchOn && !lightsOn))
+            return;
+        if (switchOn && !lightsOn)
+        {
+            lightSwitch.set(Relay.Value.kOn);
+            lightsOn = true;
+            System.out.println(Timer.getFPGATimestamp() + ", Lights On");
+        }
+        else
+        {
+            lightSwitch.set(Relay.Value.kOff);
+            lightsOn = false;
+            System.out.println(Timer.getFPGATimestamp() + ", Lights Off");
+        }
+    }
+
     public boolean findTarget()
     {
         try
         {
             ColorImage image = getImage();
-            topBoard = processImage(image);
+            bottomBoard = processImage(image);
 //            SmartDashboard.putData("Camera:", image);  // SmartDashboard gets images from the camera automatically.
             if(imageName != null)
                 SmartDashboard.putString("Image: ", imageName);
-            if(topBoard != null)
+            if(bottomBoard != null)
             {
                 SmartDashboard.putString("Target Status: ", "Found");
-                SmartDashboard.putDouble("Target Position: ", topBoard.x);
-                SmartDashboard.putDouble("Target Distance: ", topBoard.distance);
-                SmartDashboard.putDouble("Target Width: ", topBoard.width);
-                SmartDashboard.putDouble("Target Aspect Ratio: ", topBoard.aspectRatio);
-                SmartDashboard.putString("Target W x H: ", topBoard.particle.boundingRectWidth + " x "
-                        + topBoard.particle.boundingRectHeight);
+                SmartDashboard.putDouble("Target Position: ", bottomBoard.x);
+                SmartDashboard.putDouble("Target Distance: ", bottomBoard.distance);
+                SmartDashboard.putDouble("Target Width: ", bottomBoard.width);
+                SmartDashboard.putDouble("Target Aspect Ratio: ", bottomBoard.aspectRatio);
+                SmartDashboard.putDouble("Target Quality: ", bottomBoard.particle.particleQuality);
+                SmartDashboard.putString("Target W x H: ", bottomBoard.particle.boundingRectWidth + " x "
+                        + bottomBoard.particle.boundingRectHeight);
+
+                smartdashBoardData.showBackboardParticle(bottomBoard);
+                SmartDashboard.putData("Backboard Target", smartdashBoardData);
+
                 return true;
             }
             else
@@ -120,6 +152,7 @@ public class Vision extends Subsystem {
             // Keep track of where each particle fits on the 'map' of backboards.
             BackboardParticle bp = new BackboardParticle(r);
             System.out.println(bp.toString());
+
             if((highest == null) || (bp.y > highest.y))
                 highest = bp;
             if((lowest == null) || (bp.y < lowest.y))
@@ -128,6 +161,7 @@ public class Vision extends Subsystem {
                 leftmost = bp;
             if((rightmost == null) || (bp.x > rightmost.x))
                 rightmost = bp;
+
         }
         System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
         if(highest != null)
@@ -162,12 +196,15 @@ public class Vision extends Subsystem {
         image.free();
 
         // Figure out if we have a unique highest particle.  This assumes particleArea is unique.
-        if((highest != null)
-                && (highest.particle.particleArea != leftmost.particle.particleArea)
-                && (highest.particle.particleArea != rightmost.particle.particleArea)
-                && (highest.particle.particleArea != lowest.particle.particleArea)
-                )
-            return highest;
+//        if((highest != null)
+//                && (highest.particle.particleArea != leftmost.particle.particleArea)
+//                && (highest.particle.particleArea != rightmost.particle.particleArea)
+//                && (highest.particle.particleArea != lowest.particle.particleArea)
+//                )
+//            return highest;
+        // Find the lowest instead.  The logic being, it will be the one with the least distortion.
+        if(lowest != null)
+            return lowest;
         else
             return null;
     }

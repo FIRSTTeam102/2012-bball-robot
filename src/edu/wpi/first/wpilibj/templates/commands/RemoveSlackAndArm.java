@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class RemoveSlackAndArm extends CommandGroup {
 
     public RemoveSlackAndArm() {
+        
+        // NOTE: this makes sure that the cannon is in an "unarmed" position before it arms.
+        addSequential(new EngageClutch(false));     // This releases the clutch.
         addSequential(new RemoveCannonSlack());
         addSequential(new ArmCannon());
     }

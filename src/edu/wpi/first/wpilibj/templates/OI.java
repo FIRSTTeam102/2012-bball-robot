@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.templates.commands.ShiftHigh;
 import edu.wpi.first.wpilibj.templates.commands.ShiftLow;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
 import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
-import edu.wpi.first.wpilibj.templates.commands.TurnToGyroZero;
+import edu.wpi.first.wpilibj.templates.commands.TurnToAngle;
 import edu.wpi.first.wpilibj.templates.subsystems.TilterArm;
 
 /**
@@ -91,7 +91,7 @@ public class OI {
         xBoxY.whenPressed(new RemoveSlackAndArm());
         xBoxB.whenPressed(new GateDownThenUp());
         xBoxA.whenPressed(new Shoot());
-        xBoxX.whenPressed(new TurnToGyroZero());
+        xBoxX.whenPressed(new TurnToAngle());
 
         rightStickButton2.whileHeld(new ShiftLow());
         rightStickButton2.whenReleased(new ShiftHigh());

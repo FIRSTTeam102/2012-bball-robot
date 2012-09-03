@@ -37,6 +37,7 @@ public class RobotMap {
 
     // Relay Ports
     public static final int compressorSwitchChannel = 1;
+    public static final int cameraLightsSwitchChannel = 8;
 
     // Solenoid Modules
     public static final int solenoidModule = 2;

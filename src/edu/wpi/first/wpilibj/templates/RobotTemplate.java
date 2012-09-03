@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.templates.commands.CommandBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import Team102Lib.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.templates.commands.ShootTwo;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,12 +34,14 @@ public class RobotTemplate extends IterativeRobot {
     public void robotInit() { // called on robot start (powered on)
         CommandBase.init(); // initialize commands and the OI (created by Netbeans)
         SmartDashboard.putData("Scheduler", Scheduler.getInstance());
+        autonomousCommand = new ShootTwo();
         updateStatus();
     }
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
         CommandBase.driveTrain.gyro.reset();
+        autonomousCommand.start();
         updateStatus();
     }
 
@@ -47,20 +50,17 @@ public class RobotTemplate extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
+        updateStatus();
     }
 
   public void startCompetiton() {
       
   }
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-//        autonomousCommand.cancel();
+        autonomousCommand.cancel();     // Cancel the autonomous command.
         DriverStation ds = DriverStation.getInstance();
 
-        // ATTENTION: getAnalog does not work in robotInit()!!  (except in debug mode :()
+        // ATTENTION: getAnalogIn does not work in robotInit()!!  (except in debug mode :()
         double stickDeadening = ds.getAnalogIn(1) + 1;
         double conveyorDeadening = ds.getAnalogIn(2) + 1;
         double speedScale = ds.getAnalogIn(3) / 5.0;
@@ -79,12 +79,14 @@ public class RobotTemplate extends IterativeRobot {
     }
     public void updateStatus()
     {
-        CommandBase.driveTrain.updateStatus();
-        CommandBase.cannon.updateStatus();
-        CommandBase.pnuematics.updateStatus();
         CommandBase.ballGate.updateStatus();
+        CommandBase.cannon.updateStatus();
         CommandBase.conveyor.updateStatus();
+        CommandBase.driveTrain.updateStatus();
+        CommandBase.pnuematics.updateStatus();
+        CommandBase.shifters.updateStatus();
         CommandBase.tilterArm.updateStatus();
+//        CommandBase.vision.updateStatus();
     }
     public void teleopDisable()
     {

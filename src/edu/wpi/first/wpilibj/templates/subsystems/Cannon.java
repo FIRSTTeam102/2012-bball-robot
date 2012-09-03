@@ -21,13 +21,14 @@ import edu.wpi.first.wpilibj.templates.commands.SetSetPointWithTrigger;
  */
 public class Cannon extends Subsystem {
 
-    public static final double WINCH_MOTOR_SPEED = -0.7;
+    public static final double MOTOR_DIRECTION = -1.0;
+    public static final double WINCH_MOTOR_SPEED = MOTOR_DIRECTION * 0.7;
     public static final double TIME_TO_RELEASE_CLUTCH = 1.0;
-    public static final double TIME_TO_REMOVE_SLACK = 0.4;
-    public static final double WINCH_MOTOR_SLACK_SPEED = 0.1;
+    public static final double TIME_TO_REMOVE_SLACK = 1.0;
+    public static final double WINCH_MOTOR_SLACK_SPEED = MOTOR_DIRECTION * 0.1;
     
-    static final double MOTOR_SCALE_FACTOR = -0.7;       // UNUSED.
-    static final int ENCODER_MAX_VALUE = 440;
+    static final double MOTOR_SCALE_FACTOR = MOTOR_DIRECTION * 0.7;       // UNUSED.  Used when pulling back winch with joystick.
+    static final int ENCODER_MAX_VALUE = 1000;
 
     public int cannonSetPoint = 0;
     public Encoder encoderWinch; // = new Encoder(RobotMap.winchEncoderPortA, RobotMap.winchEncoderPortB);
@@ -81,6 +82,7 @@ public class Cannon extends Subsystem {
 
     public void updateStatus() {
         SmartDashboard.putInt("W Encoder:", encoderWinch.get());
+        SmartDashboard.putDouble("Winch Motor:", winchMotor.get());
         SmartDashboard.putInt("Cannon Set Point:", cannonSetPoint);
         SmartDashboard.putBoolean("clutchSolenoidRelease: ", clutchSolenoidHold.get());
         SmartDashboard.putBoolean("clutchSolenoidHold: ", clutchSolenoidRelease.get());
@@ -103,7 +105,11 @@ public class Cannon extends Subsystem {
     }
 
     public void setSetPointWithTrigger(Joystick xBox) {
-        double triggerValue = xBox.getAxis(Joystick.AxisType.kZ);
-        cannonSetPoint += -triggerValue * 10;
+        double triggerValue = -xBox.getAxis(Joystick.AxisType.kZ) * 2.0;
+
+        if(cannonSetPoint + triggerValue < 0)
+            return;
+        if(cannonSetPoint + triggerValue < ENCODER_MAX_VALUE)
+            cannonSetPoint += triggerValue;
     }
 }

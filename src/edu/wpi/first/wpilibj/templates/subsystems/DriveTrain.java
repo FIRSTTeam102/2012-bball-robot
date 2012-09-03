@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,8 +32,6 @@ public class DriveTrain extends PIDSubsystem {
     public ADXL345_I2C accelerometer;
     double rightJoyY;
     double leftJoyY;
-    Solenoid shiftSolenoidLow;
-    Solenoid shiftSolenoidHigh;
 
     // Initialize your subsystem here
     public DriveTrain() {
@@ -52,12 +49,8 @@ public class DriveTrain extends PIDSubsystem {
         gyro = new Gyro(RobotMap.gyroPort);
         gyro.reset();
 
-        accelerometer = new ADXL345_I2C(RobotMap.accelerometerPort, DataFormat_Range.k4G);
+        accelerometer = new ADXL345_I2C(RobotMap.accelerometerPort, DataFormat_Range.k2G);
 
-        shiftSolenoidLow = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidHigh);
-        shiftSolenoidHigh = new Solenoid(RobotMap.solenoidModule, RobotMap.shiftSolenoidLow);
-
-        shiftHigh();
     }
 
     public void enableGyroSetPoint(double setPoint) {
@@ -86,15 +79,14 @@ public class DriveTrain extends PIDSubsystem {
 
     public void updateStatus() {
         SmartDashboard.putDouble("Gyro: ", gyro.getAngle());
-        SmartDashboard.putDouble("AcclX: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kX));
-        SmartDashboard.putDouble("AcclY: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kY));
-        SmartDashboard.putDouble("AcclZ: ", accelerometer.getAcceleration(ADXL345_I2C.Axes.kZ));
+        ADXL345_I2C.AllAxes accs = accelerometer.getAccelerations();
+        SmartDashboard.putDouble("AcclX: ", accs.XAxis);
+        SmartDashboard.putDouble("AcclY: ", accs.YAxis);
+        SmartDashboard.putDouble("AcclZ: ", accs.ZAxis);
         SmartDashboard.putDouble("P: ", this.getPIDController().getP());
         SmartDashboard.putDouble("I: ", this.getPIDController().getI());
         SmartDashboard.putDouble("D: ", this.getPIDController().getD());
         SmartDashboard.putDouble("PID Error: ", this.getPIDController().getError());
-        SmartDashboard.putBoolean("shiftSolenoidHigh: ", shiftSolenoidLow.get());
-        SmartDashboard.putBoolean("shiftSolenoidLow: ", shiftSolenoidHigh.get());
         SmartDashboard.putDouble("leftDriveMotor: ", leftMotor.get());
         SmartDashboard.putDouble("rightDriveMotor: ", rightMotor.get());
         SmartDashboard.putDouble("rightJoyY: ", rightJoyY);
@@ -114,14 +106,8 @@ public class DriveTrain extends PIDSubsystem {
         rightRear.set(-output);
         rightMotor.set(-output);
     }
-    public void shiftHigh()
+    public void drive(double speed)
     {
-        shiftSolenoidLow.set(false);
-        shiftSolenoidHigh.set(true);
-    }
-    public void shiftLow()
-    {
-        shiftSolenoidLow.set(true);
-        shiftSolenoidHigh.set(false);
+        drive.tankDrive(-speed, speed);
     }
 }
