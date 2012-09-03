@@ -38,6 +38,7 @@ public class RobotTemplate extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
+        CommandBase.driveTrain.gyro.reset();
         updateStatus();
     }
 
@@ -61,14 +62,12 @@ public class RobotTemplate extends IterativeRobot {
 
         // ATTENTION: getAnalog does not work in robotInit()!!  (except in debug mode :()
         double stickDeadening = ds.getAnalogIn(1) + 1;
-        double twistDeadening = ds.getAnalogIn(2) + 1;
+        double conveyorDeadening = ds.getAnalogIn(2) + 1;
         double speedScale = ds.getAnalogIn(3) / 5.0;
         RobotMap.stickDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, stickDeadening, speedScale);
-        RobotMap.twistDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, twistDeadening, speedScale);
+        RobotMap.conveyorDeadBand = new Deadband(RobotMap.joystickRange, RobotMap.flatDeadband, conveyorDeadening, speedScale);
 
         updateStatus();
-
-        CommandBase.driveTrain.gyro.reset();
     }
 
     /**
@@ -81,8 +80,11 @@ public class RobotTemplate extends IterativeRobot {
     public void updateStatus()
     {
         CommandBase.driveTrain.updateStatus();
-        CommandBase.kicker.updateStatus();
-        CommandBase.pnuematics.updateStatus();        
+        CommandBase.cannon.updateStatus();
+        CommandBase.pnuematics.updateStatus();
+        CommandBase.ballGate.updateStatus();
+        CommandBase.conveyor.updateStatus();
+        CommandBase.tilterArm.updateStatus();
     }
     public void teleopDisable()
     {

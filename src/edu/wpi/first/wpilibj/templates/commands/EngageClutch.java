@@ -15,7 +15,7 @@ public class EngageClutch extends CommandBase {
 
     boolean engage;
     public EngageClutch(boolean engg) {
-        requires(kicker);
+        requires(cannon);
         engage = engg;
         
         // The clutch has to be release for some time to allow unwind.
@@ -30,9 +30,9 @@ public class EngageClutch extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         if(engage)
-            kicker.engageClutch();
+            cannon.engageClutch();
         else
-            kicker.disengageClutch();
+            cannon.disengageClutch();
     }
 
     // Make this return true when this Command no longer needs to run execute()

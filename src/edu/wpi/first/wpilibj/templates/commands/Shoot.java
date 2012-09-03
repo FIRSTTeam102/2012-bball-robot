@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.templates.subsystems.Cannon;
 public class Shoot extends CommandBase {
 
     public Shoot() {
-        requires(kicker);
+        requires(cannon);
         this.setTimeout(Cannon.TIME_TO_RELEASE_CLUTCH);
     }
 
@@ -24,7 +24,7 @@ public class Shoot extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        kicker.disengageClutch();
+        cannon.disengageClutch();
     }
 
     // Make this return true when this Command no longer needs to run execute()

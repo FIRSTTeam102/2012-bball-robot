@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.templates.subsystems;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.templates.commands.DriveConveyor;
 
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj.templates.commands.DriveConveyor;
  */
 public class Conveyor extends Subsystem {
 
-    static final double conveyorMotorScale = 1.0;
+    public static final double CONVEYOR_MOTOR_SCALE = 1.0;
     Victor conveyorMotor;
 
     public Conveyor()
@@ -26,8 +27,16 @@ public class Conveyor extends Subsystem {
     public void initDefaultCommand() {
         setDefaultCommand(new DriveConveyor());
     }
-    public void driveConveyor(Joystick rightXBoxStick) {
+    public void driveConveyor(Joystick xBox) {
 
-        conveyorMotor.set(rightXBoxStick.getY() * conveyorMotorScale);
+        double xBoxY = RobotMap.conveyorDeadBand.Deaden(xBox.getY());
+        conveyorMotor.set(xBoxY * CONVEYOR_MOTOR_SCALE);
+    }
+    public void driveConveyor(double yValue) {
+
+        conveyorMotor.set(yValue * CONVEYOR_MOTOR_SCALE);
+    }
+    public void updateStatus() {
+        SmartDashboard.putDouble("ConveyorMotor: ", conveyorMotor.get());
     }
 }

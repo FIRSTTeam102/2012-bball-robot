@@ -4,42 +4,42 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
+import edu.wpi.first.wpilibj.templates.subsystems.Cannon;
+
 
 /**
  *
  * @author Administrator
  */
-public class Turn90 extends CommandBase {
+public class RemoveCannonSlack extends CommandBase {
 
-    public Turn90() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        requires(driveTrain);
+    public RemoveCannonSlack() {
+        requires(cannon);
+        this.setTimeout(Cannon.TIME_TO_REMOVE_SLACK);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        driveTrain.enableGyroSetPoint(0);
+        cannon.engageClutch();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        cannon.turnOnWinchMotor(Cannon.WINCH_MOTOR_SLACK_SPEED);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-
-        return (Math.abs(driveTrain.gyro.getAngle()) < 1.0);
+        return this.isTimedOut();
     }
 
     // Called once after isFinished returns true
     protected void end() {
-        driveTrain.disablePIDMovement();
+        cannon.zeroEncoder();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        driveTrain.disablePIDMovement();
     }
 }

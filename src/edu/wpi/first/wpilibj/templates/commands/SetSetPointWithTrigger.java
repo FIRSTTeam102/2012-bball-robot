@@ -12,7 +12,7 @@ package edu.wpi.first.wpilibj.templates.commands;
 public class SetSetPointWithTrigger extends CommandBase {
 
     public SetSetPointWithTrigger() {
-        requires(kicker);
+        requires(cannon);
     }
 
     // Called just before this Command runs the first time
@@ -22,7 +22,7 @@ public class SetSetPointWithTrigger extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        kicker.setSetPointWithTrigger(oi.getXBox());
+        cannon.setSetPointWithTrigger(oi.getXBox());
     }
 
     // Make this return true when this Command no longer needs to run execute()

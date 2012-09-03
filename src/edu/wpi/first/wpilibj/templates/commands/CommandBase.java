@@ -22,7 +22,7 @@ public abstract class CommandBase extends Command {
     // Create a single static instance of all of your subsystems
    // public static Chassis chassis = new Chassis();
     public static Pnuematics pnuematics = new Pnuematics();
-    public static Cannon kicker = new Cannon();
+    public static Cannon cannon = new Cannon();
     public static DriveTrain driveTrain = new DriveTrain();
     public static BallGate ballGate = new BallGate();
     public static TilterArm tilterArm = new TilterArm();
@@ -37,24 +37,41 @@ public abstract class CommandBase extends Command {
         oi = new OI();
 
         // Show what command your subsystem is running on the SmartDashboard
+        SmartDashboard.putData(ballGate);
+        SmartDashboard.putData(cannon);
+        SmartDashboard.putData(conveyor);
         SmartDashboard.putData(driveTrain);
         SmartDashboard.putData(pnuematics);
-        SmartDashboard.putData(kicker);
-        SmartDashboard.putData(ballGate);
         SmartDashboard.putData(tilterArm);
-        SmartDashboard.putData(conveyor);
+
+        // Pnuematics Commands
         SmartDashboard.putData(new CompressorOn());
         SmartDashboard.putData(new CompressorOff());
+
+        // Cannon Commands
         SmartDashboard.putData(new EngageClutch(true));
         SmartDashboard.putData("Disengage Clutch", new EngageClutch(false));
+        SmartDashboard.putData(new RemoveCannonSlack());
         SmartDashboard.putData(new ArmCannon());
+        SmartDashboard.putData(new RemoveSlackAndArm());
         SmartDashboard.putData(new Shoot());
+
+        // Gate Commands
         SmartDashboard.putData(new GateUp());
         SmartDashboard.putData(new GateDown());
+
+        // Tilter Commands
         SmartDashboard.putData(new TilterArmUp());
         SmartDashboard.putData(new TilterArmDown());
 
+        // Conveyor Commands
+//        SmartDashboard.putData("Conveyor Forward", new DriveConveyor(Conveyor.CONVEYOR_MOTOR_SCALE));
+//        SmartDashboard.putData("Conveyor Reverse", new DriveConveyor(-Conveyor.CONVEYOR_MOTOR_SCALE));
 
+        // Drive Train commands
+        SmartDashboard.putData(new TurnToGyroZero());
+        SmartDashboard.putData(new ShiftHigh());
+        SmartDashboard.putData(new ShiftLow());
 
     }
 

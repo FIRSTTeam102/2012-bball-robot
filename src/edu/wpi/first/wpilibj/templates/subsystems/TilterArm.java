@@ -6,6 +6,7 @@ package edu.wpi.first.wpilibj.templates.subsystems;
 
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 
 /**
@@ -14,11 +15,11 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
  */
 public class TilterArm extends Subsystem {
 
-    public static final double TIME_TO_MOVE_ARM_DOWN = 1.0;
-    public static final double SPEED_TO_MOVE_ARM_DOWN = 1.0;
-    public static final double TIME_TO_MOVE_ARM_UP = 1.0;
-    public static final double SPEED_TO_MOVE_ARM_UP = 1.0;
-    static final double armDownDirection = -1.0;
+    public static final double TIME_TO_MOVE_ARM_DOWN = 0.5;
+    public static final double TIME_TO_MOVE_ARM_UP = 0.5;
+    public static final double SPEED_TO_MOVE_ARM_DOWN = 0.75;
+    public static final double SPEED_TO_MOVE_ARM_UP = 0.75;
+    public static final double ARM_DOWN_DIRECTION = 1.0;
     Victor armMotor;
 
     public TilterArm()
@@ -28,13 +29,20 @@ public class TilterArm extends Subsystem {
     public void initDefaultCommand() {
     }
     public void armUp(double speed) {
-        armMotor.set(-armDownDirection * speed);
+        armMotor.set(-ARM_DOWN_DIRECTION * speed);
     }
     public void armDown(double speed) {
-        armMotor.set(armDownDirection * speed);
+        armMotor.set(ARM_DOWN_DIRECTION * speed);
     }
     public void armStop()
     {
         armMotor.set(0.0);
+    }
+    public void move(double speed)
+    {
+        armMotor.set(speed);
+    }
+    public void updateStatus() {
+        SmartDashboard.putDouble("Tilter Arm Motor: ", armMotor.get());
     }
 }

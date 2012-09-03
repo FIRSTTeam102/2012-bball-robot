@@ -4,11 +4,13 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.templates.commands.ArmAndShoot;
-import edu.wpi.first.wpilibj.templates.commands.ArmCannon;
 import edu.wpi.first.wpilibj.templates.commands.CompressorOff;
 import edu.wpi.first.wpilibj.templates.commands.CompressorOn;
+import edu.wpi.first.wpilibj.templates.commands.RemoveSlackAndArm;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
-import edu.wpi.first.wpilibj.templates.commands.Turn90;
+import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
+import edu.wpi.first.wpilibj.templates.commands.TurnToGyroZero;
+import edu.wpi.first.wpilibj.templates.subsystems.TilterArm;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -58,7 +60,8 @@ public class OI {
     private JoystickButton xBoxA;
     private JoystickButton xBoxB;
     private JoystickButton xBoxX;
-
+    private JoystickButton rightStickButton4;
+    private JoystickButton rightStickButton3;
 
     public OI() {
         leftstick = new Joystick(JOYSTICK_PORT);
@@ -72,12 +75,19 @@ public class OI {
         leftStickButton8.whenPressed(new CompressorOn());
         leftStickButton8.whenReleased(new CompressorOff());
 
+        rightStickButton3 = new JoystickButton(leftstick, 3);
+        rightStickButton4 = new JoystickButton(leftstick, 4);
+
         xBoxA = new JoystickButton(xBox, 1);
         xBoxA.whenPressed(new Shoot());
         xBoxB = new JoystickButton(xBox, 2);
-        xBoxB.whenPressed(new ArmCannon());
+        xBoxB.whenPressed(new RemoveSlackAndArm());
         xBoxX = new JoystickButton(xBox, 3);
-        xBoxX.whenPressed(new Turn90());
+        xBoxX.whenPressed(new TurnToGyroZero());
+
+        rightStickButton3.whileHeld(new TilterArmDrive(TilterArm.ARM_DOWN_DIRECTION * TilterArm.SPEED_TO_MOVE_ARM_DOWN));
+//        rightStickButton4.whenReleased(new TilterArmUp());
+        rightStickButton4.whileHeld(new TilterArmDrive(-TilterArm.ARM_DOWN_DIRECTION * TilterArm.SPEED_TO_MOVE_ARM_UP));
     }
 
     public Joystick getLeftJoystick() {

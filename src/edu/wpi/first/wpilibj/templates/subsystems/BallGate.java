@@ -6,6 +6,7 @@ package edu.wpi.first.wpilibj.templates.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.RobotMap;
 
 /**
@@ -36,5 +37,9 @@ public class BallGate extends Subsystem {
     public void gateDown() {
         gateSolenoidDown.set(true);
         gateSolenoidUp.set(false);
+    }
+    public void updateStatus() {
+        SmartDashboard.putBoolean("gateSolenoidDown: ", gateSolenoidDown.get());
+        SmartDashboard.putBoolean("gateSolenoidUp: ", gateSolenoidUp.get());
     }
 }

@@ -57,8 +57,10 @@ public class Deadband {
             // NOTE: this will amplify, not deaden if abs(theValue) > 1
             double retVal = 0.0;
             if (theValue > 0.0) {
+//                retVal = MathLib.interpolatedPow(theValue, expFactor);
                 retVal = MathLib.pow(theValue, expFactor);
             } else {
+//                retVal = -MathLib.interpolatedPow(Math.abs(theValue), expFactor);
                 retVal = -MathLib.pow(Math.abs(theValue), expFactor);
             }
 

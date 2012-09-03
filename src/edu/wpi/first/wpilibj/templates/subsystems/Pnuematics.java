@@ -33,5 +33,6 @@ public class Pnuematics extends Subsystem {
     }
     public void updateStatus()
     {
+        // We canot get the value of the switch
     }
 }

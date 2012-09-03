@@ -9,33 +9,37 @@ package edu.wpi.first.wpilibj.templates.commands;
  *
  * @author Administrator
  */
-public class Turn extends CommandBase {
-private double m_timeout;
-    public Turn(double timeout) {
-        m_timeout = timeout;
+public class TurnToGyroZero extends CommandBase {
+
+    public TurnToGyroZero() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+        requires(driveTrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        setTimeout(m_timeout);
+        driveTrain.enableGyroSetPoint(0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-       // driveTrain.turnLeft();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return isTimedOut();
+
+        return (Math.abs(driveTrain.gyro.getAngle()) < 1.0);
     }
 
     // Called once after isFinished returns true
     protected void end() {
+        driveTrain.disablePIDMovement();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        driveTrain.disablePIDMovement();
     }
 }

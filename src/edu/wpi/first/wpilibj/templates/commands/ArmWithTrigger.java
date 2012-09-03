@@ -12,18 +12,18 @@ package edu.wpi.first.wpilibj.templates.commands;
 public class ArmWithTrigger extends CommandBase {
 
     public ArmWithTrigger() {
-        requires(kicker);
+        requires(cannon);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        kicker.engageClutch();
-        kicker.zeroEncoder();
+        cannon.engageClutch();
+        cannon.zeroEncoder();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        kicker.armWithTrigger(oi.getXBox());
+        cannon.armWithTrigger(oi.getXBox());
     }
 
     // Make this return true when this Command no longer needs to run execute()
