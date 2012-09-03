@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.templates.RobotMap;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +38,7 @@ public class DriveTrain extends PIDSubsystem {
     public DriveTrain() {
         super("DriveTrain", Kp, Ki, Kd);
         leftMotor = new Victor(RobotMap.leftMotor);
-        rightMotor = new Victor(RobotMap.rightMotor);
+        rightMotor = new Jaguar(RobotMap.rightMotor);
         drive = new RobotDrive(leftMotor, rightMotor);
         drive.setSafetyEnabled(false);
 /*        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -74,6 +75,8 @@ public class DriveTrain extends PIDSubsystem {
         rightJoyY = RobotMap.stickDeadBand.Deaden(rightJoyY);
         leftJoyY = RobotMap.stickDeadBand.Deaden(leftJoyY);
 
+//        System.out.println("Left Joy: " + -leftJoyY);
+//        System.out.println("Right Joy: " + rightJoyY);
         drive.tankDrive(-leftJoyY, rightJoyY);
     }
 

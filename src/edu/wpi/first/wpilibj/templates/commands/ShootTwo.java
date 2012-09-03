@@ -7,7 +7,6 @@ package edu.wpi.first.wpilibj.templates.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import edu.wpi.first.wpilibj.templates.RobotMap;
 
 /**
  *
@@ -18,9 +17,9 @@ public class ShootTwo extends CommandGroup {
     public ShootTwo() {
         DriverStation ds = DriverStation.getInstance();
 
-        boolean center = ds.getDigitalIn(RobotMap.autonomousCenter);    // Are we in the center position?
-        boolean left = ds.getDigitalIn(RobotMap.autonomousLeft);      // if not in the center are we on the left?
-        boolean gotoRamp = ds.getDigitalIn(RobotMap.autonomousRamp);// Should we go to the ramp after shooting?
+        boolean center = ds.getDigitalIn(1);    // Are we in the center position?
+        boolean left = ds.getDigitalIn(2);      // if not in the center are we on the left?
+        boolean gotoRamp = ds.getDigitalIn(3);  // Should we go to the ramp after shooting?
         double preShotWaitTime = ds.getAnalogIn(4) * 2.0; // How many seconds to wait in autonomous?
         int cannonSetPoint;
         double driveAngleToRamp;

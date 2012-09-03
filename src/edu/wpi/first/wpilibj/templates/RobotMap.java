@@ -50,10 +50,4 @@ public class RobotMap {
 
     // I2C ports
     public static final int accelerometerPort = 1;
-
-    public static final int autonomousDisabled = 1;
-    public static final int autonomousCenter = 2;
-    public static final int autonomousLeft = 3;
-    public static final int autonomousRamp = 4;
-
 }

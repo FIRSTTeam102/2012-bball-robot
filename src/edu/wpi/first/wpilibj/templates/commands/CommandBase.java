@@ -55,12 +55,13 @@ public abstract class CommandBase extends Command {
         SmartDashboard.putData(new CompressorOff());
 
         // Cannon Commands
-        SmartDashboard.putData(new ZeroWinchEncoder());
         SmartDashboard.putData(new EngageClutch(true));
         SmartDashboard.putData("Disengage Clutch", new EngageClutch(false));
         SmartDashboard.putData(new RemoveCannonSlack());
+        SmartDashboard.putData(new RemoveCannonSlackwDiff());
         SmartDashboard.putData(new ArmCannon());
         SmartDashboard.putData(new RemoveSlackAndArm());
+        SmartDashboard.putData(new RemoveSlackwDiffAndArm());
         SmartDashboard.putData(new Shoot());
 
         // Gate Commands

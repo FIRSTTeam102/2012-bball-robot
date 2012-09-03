@@ -24,13 +24,13 @@ public class Cannon extends Subsystem {
     public static final double MOTOR_DIRECTION = -1.0;
     public static final double WINCH_MOTOR_SPEED = MOTOR_DIRECTION * 1.0;
     public static final double TIME_TO_RELEASE_CLUTCH = 1.0;
-    public static final double TIME_TO_REMOVE_SLACK = 1.0;  // NOTE: this is a maximum time.  We use the encoder to figure out when the slack is removed.
-    public static final double WINCH_MOTOR_SLACK_SPEED = MOTOR_DIRECTION * 0.12;
+    public static final double TIME_TO_REMOVE_SLACK = 1.0;
+    public static final double WINCH_MOTOR_SLACK_SPEED = MOTOR_DIRECTION * 0.15;
     
-    static final double MOTOR_SCALE_FACTOR = MOTOR_DIRECTION * 0.7;       // UNUSED.  Used when pulling back winch with joystick.
+    static final double MOTOR_SCALE_FACTOR = MOTOR_DIRECTION * 1.0;       // UNUSED.  Used when pulling back winch with joystick.
     static final int ENCODER_MAX_VALUE = 1000;
 
-    public int cannonSetPoint = 0;
+    public int cannonSetPoint = 640;
     public Encoder encoderWinch; // = new Encoder(RobotMap.winchEncoderPortA, RobotMap.winchEncoderPortB);
     Victor winchMotor;
     Solenoid clutchSolenoidHold;
