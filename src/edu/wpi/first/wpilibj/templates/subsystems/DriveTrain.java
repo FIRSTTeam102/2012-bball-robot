@@ -31,6 +31,8 @@ public class DriveTrain extends PIDSubsystem {
     RobotDrive drive;
     public Gyro gyro;
     public ADXL345_I2C accelerometer;
+    double preRightJoyY;
+    double preLeftJoyY;
     double rightJoyY;
     double leftJoyY;
 
@@ -69,11 +71,11 @@ public class DriveTrain extends PIDSubsystem {
 
     public void driveWithJoysticks(Joystick leftstick, Joystick rightstick) {
 
-        rightJoyY = rightstick.getY();
-        leftJoyY = leftstick.getY();
+        preRightJoyY = rightstick.getY();
+        preLeftJoyY = leftstick.getY();
 
-        rightJoyY = RobotMap.stickDeadBand.Deaden(rightJoyY);
-        leftJoyY = RobotMap.stickDeadBand.Deaden(leftJoyY);
+        rightJoyY = RobotMap.stickDeadBand.Deaden(preRightJoyY);
+        leftJoyY = RobotMap.stickDeadBand.Deaden(preLeftJoyY);
 
 //        System.out.println("Left Joy: " + -leftJoyY);
 //        System.out.println("Right Joy: " + rightJoyY);
@@ -97,6 +99,7 @@ public class DriveTrain extends PIDSubsystem {
 
         MessageLogger.WriteToLCD(RobotMap.GyroLCDLine, RobotMap.GyroLCDCol
             , "Gy: " + MathLib.round(gyro.getAngle(), 1));
+//        MessageLogger.LogMessage(preLeftJoyY + "\t" + preRightJoyY + "\t" + -leftJoyY + "\t" + rightJoyY + "\t" + leftMotor.get() + "\t" + rightMotor.get());
      }
 
     protected double returnPIDInput() {
