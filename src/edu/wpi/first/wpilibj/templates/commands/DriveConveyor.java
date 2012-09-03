@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
+import Team102Lib.MessageLogger;
+
 
 
 /**
@@ -19,6 +21,7 @@ public class DriveConveyor extends CommandBase {
     public DriveConveyor() {
         requires(conveyor); // reserve the chassis subsystem
         conveyorSpeed = NULL_CONVEYOR_SPEED;
+        MessageLogger.LogMessage("Creating DriveConveyor");
     }
     public DriveConveyor(double speed) {
         requires(conveyor); // reserve the chassis subsystem

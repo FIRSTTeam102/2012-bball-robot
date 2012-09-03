@@ -91,6 +91,9 @@ public class OI {
         rightStickButton3 = new JoystickButton(rightstick, 3);
         rightStickButton4 = new JoystickButton(rightstick, 4);
 
+        leftStickButton3 = new JoystickButton(leftstick, 3);
+        leftStickButton4 = new JoystickButton(leftstick, 4);
+
         xBoxA = new JoystickButton(xBox, 1);
         xBoxB = new JoystickButton(xBox, 2);
         xBoxX = new JoystickButton(xBox, 3);

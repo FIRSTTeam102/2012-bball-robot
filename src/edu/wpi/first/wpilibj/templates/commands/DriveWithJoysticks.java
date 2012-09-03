@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
+import Team102Lib.MessageLogger;
+
 
 
 /**
@@ -16,6 +18,7 @@ public class DriveWithJoysticks extends CommandBase {
 
     public DriveWithJoysticks() {
         requires(driveTrain); // reserve the chassis subsystem
+        MessageLogger.LogMessage("Creating DriveWithJoySticks");
     }
 
     // Called just before this Command runs the first time

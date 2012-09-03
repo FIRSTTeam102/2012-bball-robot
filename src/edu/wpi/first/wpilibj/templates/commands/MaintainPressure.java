@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
+import Team102Lib.MessageLogger;
+
 
 /**
  *
@@ -13,6 +15,7 @@ public class MaintainPressure extends CommandBase {
 
     public MaintainPressure() {
         requires(pnuematics);
+        MessageLogger.LogMessage("Creating MaintainPressure");
     }
 
     // Called just before this Command runs the first time

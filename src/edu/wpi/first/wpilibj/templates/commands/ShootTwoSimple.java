@@ -30,8 +30,9 @@ public class ShootTwoSimple extends CommandGroup {
         addSequential(new Shoot());
 
         // Second Shot
-        addSequential(new GateDownThenUp());
-        addSequential(new RemoveSlackwDiffAndArm());
+        addSequential(new GateDown());
+        addSequential(new RemoveSlackAndArm());
+//        addSequential(new RemoveSlackwDiffAndArm());
         System.out.println("Shoot 2");
         addSequential(new Shoot());
     }
