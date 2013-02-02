@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import Team102Lib.BackboardParticle;
 import Team102Lib.MathLib;
 import Team102Lib.MessageLogger;
-import Team102Lib.VisionTargetSDBData;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.RGBImage;
