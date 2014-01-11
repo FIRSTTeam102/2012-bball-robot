@@ -16,11 +16,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.templates.commands.DriveWithXbox;
+
 /**
  *
  * @author Administrator
  */
-public class DriveTrain extends PIDSubsystem {
+public class DriveTrain extends PIDSubsystem
+{
     private static final double Kp = -.05;
     private static final double Ki = 20.0;
     private static final double Kd = 0.0;
@@ -37,17 +40,18 @@ public class DriveTrain extends PIDSubsystem {
     double leftJoyY;
 
     // Initialize your subsystem here
-    public DriveTrain() {
+    public DriveTrain()
+    {
         super("DriveTrain", Kp, Ki, Kd);
         leftMotor = new Victor(RobotMap.leftMotor);
         rightMotor = new Victor(RobotMap.rightMotor);
         drive = new RobotDrive(leftMotor, rightMotor);
         drive.setSafetyEnabled(false);
-/*        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-*/
+        /*        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+         */
         // Gyro setup
         gyro = new Gyro(RobotMap.gyroPort);
         gyro.reset();
@@ -56,20 +60,24 @@ public class DriveTrain extends PIDSubsystem {
 
     }
 
-    public void enableGyroSetPoint(double setPoint) {
+    public void enableGyroSetPoint(double setPoint)
+    {
         setSetpoint(setPoint);
         enable();
     }
 
-    public void disablePIDMovement() {
+    public void disablePIDMovement()
+    {
         disable();
     }
-    
-    public void initDefaultCommand() {
-         setDefaultCommand(new DriveWithJoysticks());
+
+    public void initDefaultCommand()
+    {
+        setDefaultCommand(new DriveWithXbox());
     }
 
-    public void driveWithJoysticks(Joystick leftstick, Joystick rightstick) {
+    public void driveWithJoysticks(Joystick leftstick, Joystick rightstick)
+    {
 
         preRightJoyY = rightstick.getY();
         preLeftJoyY = leftstick.getY();
@@ -82,7 +90,21 @@ public class DriveTrain extends PIDSubsystem {
         drive.tankDrive(-leftJoyY, rightJoyY);
     }
 
-    public void updateStatus() {
+    public void driveWithXbox(Joystick xbox)
+    {
+
+        double preRighty = xbox.getRawAxis(RobotMap.xBoxRightYAxis);
+        double preLefty = xbox.getRawAxis(RobotMap.xBoxLeftYAxis);
+
+        double righty = RobotMap.stickDeadBand.Deaden(preRighty);
+        double lefty = RobotMap.stickDeadBand.Deaden(preLefty);
+
+        MessageLogger.LogMessage("XBox\t" + preRighty + "\t" + preLefty + "\t" + righty + "\t" + lefty);
+        drive.tankDrive(lefty, righty);
+    }
+
+    public void updateStatus()
+    {
 //        SmartDashboard.putDouble("Gyro: ", gyro.getAngle());
 //        ADXL345_I2C.AllAxes accs = accelerometer.getAccelerations();
 //        SmartDashboard.putDouble("AcclX: ", accs.XAxis);
@@ -97,24 +119,26 @@ public class DriveTrain extends PIDSubsystem {
 //        SmartDashboard.putDouble("rightJoyY: ", rightJoyY);
 //        SmartDashboard.putDouble("leftJoyY: ", -leftJoyY);
 
-        MessageLogger.WriteToLCD(RobotMap.GyroLCDLine, RobotMap.GyroLCDCol
-            , "Gy: " + MathLib.round(gyro.getAngle(), 1));
+        MessageLogger.WriteToLCD(RobotMap.GyroLCDLine, RobotMap.GyroLCDCol, "Gy: " + MathLib.round(gyro.getAngle(), 1));
 //        MessageLogger.LogMessage(preLeftJoyY + "\t" + preRightJoyY + "\t" + -leftJoyY + "\t" + rightJoyY + "\t" + leftMotor.get() + "\t" + rightMotor.get());
-     }
+    }
 
-    protected double returnPIDInput() {
+    protected double returnPIDInput()
+    {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         return gyro.getAngle();
     }
 
-    protected void usePIDOutput(double output) {
+    protected void usePIDOutput(double output)
+    {
         leftRear.set(output);
         leftMotor.set(output);
         rightRear.set(-output);
         rightMotor.set(-output);
     }
+
     public void drive(double speed)
     {
         drive.tankDrive(-speed, speed);

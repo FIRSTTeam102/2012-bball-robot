@@ -30,7 +30,7 @@ public class Conveyor extends Subsystem {
     }
     public void driveConveyor(Joystick xBox) {
 
-        joyY = RobotMap.conveyorDeadBand.Deaden(xBox.getY());
+        joyY = RobotMap.conveyorDeadBand.Deaden(xBox.getRawAxis(RobotMap.xBoxTriggerAxis)-0.5);
         conveyorMotor.set(joyY * CONVEYOR_MOTOR_SCALE);
     }
     public void driveConveyor(double yValue) {

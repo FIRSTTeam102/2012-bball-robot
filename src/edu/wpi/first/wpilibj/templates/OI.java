@@ -72,9 +72,9 @@ public class OI {
     private JoystickButton xBoxRightBumper;
 
     public OI() {
-        leftstick = new Joystick(JOYSTICK_PORT);
+        leftstick = new Joystick(JOYSTICK_PORT3);
         rightstick = new Joystick(JOYSTICK_PORT2);
-        xBox = new Joystick(JOYSTICK_PORT3);
+        xBox = new Joystick(JOYSTICK_PORT);
 
 //        trigger = new JoystickButton(leftstick, Joystick.ButtonType.kTop.value);
 //        trigger.whenPressed(new ArmAndShoot());

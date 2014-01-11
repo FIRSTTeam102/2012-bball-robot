@@ -76,4 +76,12 @@ public class RobotMap {
 
     public static final DriverStationLCD.Line TargetSetPointLCDLine = DriverStationLCD.Line.kUser5;
     public static final int TargetSetPointLCDCol = 1;
+    
+     // XBox Controller Joystick Axis
+    public static final int xBoxLeftXAxis = 1;
+    public static final int xBoxLeftYAxis = 2;
+    public static final int xBoxTriggerAxis = 3;  // Left trigger 0.0-0.5, right trigger 0.5-1.0
+    public static final int xBoxRightXAxis = 4;    
+    public static final int xBoxRightYAxis = 5;
+    public static final int xBoxDPadHorizontalAxis = 6;
 }
