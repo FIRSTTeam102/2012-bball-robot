@@ -99,8 +99,8 @@ public class DriveTrain extends PIDSubsystem
         double righty = RobotMap.stickDeadBand.Deaden(preRighty);
         double lefty = RobotMap.stickDeadBand.Deaden(preLefty);
 
-        MessageLogger.LogMessage("XBox\t" + preRighty + "\t" + preLefty + "\t" + righty + "\t" + lefty);
-        drive.tankDrive(lefty, righty);
+      //  MessageLogger.LogMessage("XBox\t" + preRighty + "\t" + preLefty + "\t" + righty + "\t" + lefty);
+        drive.tankDrive(-lefty, righty);
     }
 
     public void updateStatus()

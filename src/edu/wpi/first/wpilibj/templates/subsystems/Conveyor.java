@@ -26,7 +26,7 @@ public class Conveyor extends Subsystem {
         conveyorMotor = new Victor(RobotMap.conveyorMotorPort);
     }
     public void initDefaultCommand() {
-        setDefaultCommand(new DriveConveyor());
+       
     }
     public void driveConveyor(Joystick xBox) {
 

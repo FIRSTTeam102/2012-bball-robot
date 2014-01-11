@@ -84,4 +84,14 @@ public class RobotMap {
     public static final int xBoxRightXAxis = 4;    
     public static final int xBoxRightYAxis = 5;
     public static final int xBoxDPadHorizontalAxis = 6;
+    
+    // XBox Controller Button Indexes
+    public static final int xBoxAIndex = 1;
+    public static final int xBoxBIndex = 2;
+    public static final int xBoxXIndex = 3;
+    public static final int xBoxYIndex = 4;
+    public static final int xBoxLeftBumperIndex = 5;
+    public static final int xBoxRightBumperIndex = 6;
+    public static final int xBoxBackButtonIndex = 7;
+    public static final int xBoxStartButtonIndex = 8;
 }

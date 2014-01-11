@@ -3,6 +3,9 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.templates.commands.ConveyorDown;
+import edu.wpi.first.wpilibj.templates.commands.ConveyorStop;
+import edu.wpi.first.wpilibj.templates.commands.ConveyorUp;
 import edu.wpi.first.wpilibj.templates.commands.GateDownThenUp;
 import edu.wpi.first.wpilibj.templates.commands.LightAndFindTarget;
 import edu.wpi.first.wpilibj.templates.commands.LightsOff;
@@ -11,6 +14,7 @@ import edu.wpi.first.wpilibj.templates.commands.RemoveSlackwSensorAndArm;
 import edu.wpi.first.wpilibj.templates.commands.Shift;
 import edu.wpi.first.wpilibj.templates.commands.Shoot;
 import edu.wpi.first.wpilibj.templates.commands.TilterArmDrive;
+import edu.wpi.first.wpilibj.templates.commands.ToggleShift;
 import edu.wpi.first.wpilibj.templates.subsystems.TilterArm;
 
 /**
@@ -70,6 +74,8 @@ public class OI {
     private JoystickButton xBoxX;
     private JoystickButton xBoxY;
     private JoystickButton xBoxRightBumper;
+    private JoystickButton xBoxLeftBumper;
+    private JoystickButton xBoxBackButton;
 
     public OI() {
         leftstick = new Joystick(JOYSTICK_PORT3);
@@ -95,13 +101,20 @@ public class OI {
         xBoxX = new JoystickButton(xBox, 3);
         xBoxY = new JoystickButton(xBox, 4);
         xBoxRightBumper = new JoystickButton(xBox, 6);
+        xBoxLeftBumper = new JoystickButton(xBox, 5);
+        xBoxBackButton = new JoystickButton (xBox, 7);
 
         xBoxY.whenPressed(new RemoveSlackwSensorAndArm());
         xBoxB.whenPressed(new GateDownThenUp());
         xBoxA.whenPressed(new Shoot());
         xBoxX.whenPressed(new LightAndFindTarget());
-        xBoxRightBumper.whenPressed(new LightsOn());
-        xBoxRightBumper.whenReleased(new LightsOff());
+        xBoxRightBumper.whenPressed(new ConveyorUp());
+        xBoxRightBumper.whenReleased(new ConveyorStop());
+        xBoxLeftBumper.whenPressed (new ConveyorDown());
+        xBoxLeftBumper.whenReleased(new ConveyorStop());
+        xBoxBackButton.whenPressed(new ToggleShift());
+        
+//      xBoxRightBumper.whenReleased(new LightsOff());
 
         rightStickButton2.whileHeld(new Shift());
 //        rightStickButton2.whenReleased(new ShiftHigh());

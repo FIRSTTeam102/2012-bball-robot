@@ -4,6 +4,7 @@
  */
 package edu.wpi.first.wpilibj.templates.subsystems;
 
+import Team102Lib.MessageLogger;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +39,18 @@ public class Shifters extends Subsystem {
     {
         shiftSolenoidLow.set(false);
         shiftSolenoidHigh.set(true);
+        shiftSolenoidLow.get();
+    }
+    
+     public void shiftToggle()
+    {
+        boolean shiftlow = shiftSolenoidLow.get();
+        boolean  shifthigh = shiftSolenoidHigh.get();
+        MessageLogger.LogMessage("Shift Low\t" + shiftlow + "Shift High\t" + shifthigh);
+        if((!shiftSolenoidLow.get()) && (shiftSolenoidHigh.get()))
+            shiftLow();
+        else
+            shiftHigh();
     }
     public void shiftLow()
     {
